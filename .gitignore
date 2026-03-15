@@ -105,10 +105,13 @@ credentials/
 # Cline MCP memory (user-specific)
 .cline/
 
-# AI assistant caches (user-specific, not project .clinerules)
+# AI assistant caches (user-specific)
 .cursor/
 .continue/
 .aider*
+
+# Cline rules (user-specific project configuration)
+.clinerules
 
 # Nischen-Analyse (development notes - German)
 nischen-analyse*.md

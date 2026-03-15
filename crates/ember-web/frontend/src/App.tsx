@@ -167,7 +167,7 @@ export default function App() {
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 bg-gray-800 border-b border-gray-700">
         <div className="flex items-center gap-3">
-          <Flame className="w-8 h-8 text-orange-500" />
+          <Flame className="w-8 h-8 text-orange-600" />
           <div>
             <h1 className="text-xl font-bold text-white">Ember AI</h1>
             {serverInfo && (
@@ -184,7 +184,7 @@ export default function App() {
             onClick={() => setActiveView('chat')}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
               activeView === 'chat'
-                ? 'bg-orange-500 text-white'
+                ? 'bg-orange-700 text-white'
                 : 'text-gray-400 hover:text-white'
             }`}
             title="Chat"
@@ -196,7 +196,7 @@ export default function App() {
             onClick={() => setActiveView('dashboard')}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
               activeView === 'dashboard'
-                ? 'bg-orange-500 text-white'
+                ? 'bg-orange-700 text-white'
                 : 'text-gray-400 hover:text-white'
             }`}
             title="Dashboard"
@@ -212,7 +212,7 @@ export default function App() {
               <select
                 value={selectedModel}
                 onChange={e => setSelectedModel(e.target.value)}
-                className="px-3 py-1.5 text-sm bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="px-3 py-1.5 text-sm bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-600"
                 title="Select Model"
                 aria-label="Select Model"
               >
@@ -255,7 +255,7 @@ export default function App() {
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.length === 0 && !streamingContent && (
           <div className="flex flex-col items-center justify-center h-full text-gray-500">
-            <Flame className="w-16 h-16 mb-4 text-orange-500/50" />
+            <Flame className="w-16 h-16 mb-4 text-orange-600/50" />
             <p className="text-lg">Start a conversation with Ember</p>
             <p className="text-sm mt-2">Type a message below to begin</p>
           </div>
@@ -267,14 +267,14 @@ export default function App() {
             className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             {message.role === 'assistant' && (
-              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center">
-                <Bot className="w-5 h-5 text-orange-500" />
+              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-orange-700/20 flex items-center justify-center">
+                <Bot className="w-5 h-5 text-orange-600" />
               </div>
             )}
             <div
               className={`max-w-[80%] px-4 py-3 rounded-2xl ${
                 message.role === 'user'
-                  ? 'bg-orange-500 text-white'
+                  ? 'bg-orange-700 text-white'
                   : 'bg-gray-800 text-gray-100'
               }`}
             >
@@ -297,8 +297,8 @@ export default function App() {
         {/* Streaming message */}
         {streamingContent && (
           <div className="flex gap-3 justify-start">
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center">
-              <Bot className="w-5 h-5 text-orange-500" />
+            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-orange-700/20 flex items-center justify-center">
+              <Bot className="w-5 h-5 text-orange-600" />
             </div>
             <div className="max-w-[80%] px-4 py-3 rounded-2xl bg-gray-800 text-gray-100">
               <div className="markdown-content">
@@ -311,11 +311,11 @@ export default function App() {
         {/* Loading indicator */}
         {isLoading && !streamingContent && (
           <div className="flex gap-3 justify-start">
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center">
-              <Bot className="w-5 h-5 text-orange-500" />
+            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-orange-700/20 flex items-center justify-center">
+              <Bot className="w-5 h-5 text-orange-600" />
             </div>
             <div className="px-4 py-3 rounded-2xl bg-gray-800">
-              <Loader2 className="w-5 h-5 text-orange-500 animate-spin" />
+              <Loader2 className="w-5 h-5 text-orange-600 animate-spin" />
             </div>
           </div>
         )}
@@ -333,13 +333,13 @@ export default function App() {
             onKeyDown={handleKeyDown}
             placeholder="Type your message..."
             rows={1}
-            className="flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+            className="flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent"
             style={{ minHeight: '48px', maxHeight: '200px' }}
           />
           <button
             onClick={sendMessage}
             disabled={!input.trim() || isLoading}
-            className="px-4 py-3 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-xl transition-colors flex items-center justify-center"
+            className="px-4 py-3 bg-orange-700 hover:bg-orange-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-xl transition-colors flex items-center justify-center"
           >
             {isLoading ? (
               <Loader2 className="w-5 h-5 animate-spin" />

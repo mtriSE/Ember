@@ -1,21 +1,21 @@
 import {
-    AlertTriangle,
-    ArrowDown,
-    ArrowUp,
-    BarChart3,
-    Bot,
-    Brain,
-    Clock,
-    DollarSign,
-    Eye,
-    Filter,
-    Lightbulb,
-    RefreshCw,
-    Settings2,
-    Sparkles,
-    TrendingUp,
-    Wrench,
-    Zap,
+  AlertTriangle,
+  ArrowDown,
+  ArrowUp,
+  BarChart3,
+  Bot,
+  Brain,
+  Clock,
+  DollarSign,
+  Eye,
+  Filter,
+  Lightbulb,
+  RefreshCw,
+  Settings2,
+  Sparkles,
+  TrendingUp,
+  Wrench,
+  Zap,
 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 
@@ -81,15 +81,15 @@ const formatNumber = (value: number): string => {
 
 // Provider colors
 const providerColors: Record<string, string> = {
-  openai: 'bg-green-500',
-  anthropic: 'bg-orange-500',
-  google: 'bg-blue-500',
-  mistral: 'bg-purple-500',
-  groq: 'bg-yellow-500',
-  deepseek: 'bg-cyan-500',
-  xai: 'bg-red-500',
-  openrouter: 'bg-pink-500',
-  ollama: 'bg-gray-500',
+  openai: 'bg-green-600',
+  anthropic: 'bg-orange-600',
+  google: 'bg-blue-600',
+  mistral: 'bg-purple-600',
+  groq: 'bg-yellow-600',
+  deepseek: 'bg-cyan-600',
+  xai: 'bg-red-600',
+  openrouter: 'bg-pink-600',
+  ollama: 'bg-gray-600',
 }
 
 // Stats Card Component
@@ -109,11 +109,11 @@ function StatCard({
   color?: string
 }) {
   const colorClasses: Record<string, string> = {
-    orange: 'bg-orange-500/20 text-orange-500',
-    green: 'bg-green-500/20 text-green-500',
-    blue: 'bg-blue-500/20 text-blue-500',
-    purple: 'bg-purple-500/20 text-purple-500',
-    red: 'bg-red-500/20 text-red-500',
+    orange: 'bg-orange-700/20 text-orange-600',
+    green: 'bg-green-700/20 text-green-600',
+    blue: 'bg-blue-700/20 text-blue-600',
+    purple: 'bg-purple-700/20 text-purple-600',
+    red: 'bg-red-700/20 text-red-600',
   }
 
   return (
@@ -168,7 +168,7 @@ function BudgetProgress({
       <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
         <div
           className={`h-full transition-all duration-300 ${
-            isExceeded ? 'bg-red-500' : isWarning ? 'bg-yellow-500' : 'bg-orange-500'
+            isExceeded ? 'bg-red-600' : isWarning ? 'bg-yellow-600' : 'bg-orange-700'
           }`}
           style={{ width: `${percentage}%` }}
         />
@@ -192,7 +192,7 @@ function BudgetProgress({
 // Model Card Component
 function ModelCard({ model }: { model: ExtendedModel }) {
   return (
-    <div className="bg-gray-800 rounded-lg p-4 border border-gray-700 hover:border-orange-500/50 transition-colors">
+    <div className="bg-gray-800 rounded-lg p-4 border border-gray-700 hover:border-orange-600/50 transition-colors">
       <div className="flex items-start justify-between mb-2">
         <div>
           <h4 className="font-medium text-white">{model.name}</h4>
@@ -251,15 +251,15 @@ function ModelCard({ model }: { model: ExtendedModel }) {
 // Recommendation Card Component
 function RecommendationCard({ recommendation }: { recommendation: Recommendation }) {
   const priorityColors = {
-    1: 'border-red-500/50 bg-red-500/5',
-    2: 'border-yellow-500/50 bg-yellow-500/5',
-    3: 'border-blue-500/50 bg-blue-500/5',
+    1: 'border-red-600/50 bg-red-600/5',
+    2: 'border-yellow-600/50 bg-yellow-600/5',
+    3: 'border-blue-600/50 bg-blue-600/5',
   }
 
   return (
     <div className={`rounded-lg p-4 border ${priorityColors[recommendation.priority as 1 | 2 | 3] || priorityColors[3]}`}>
       <div className="flex items-start gap-3">
-        <Lightbulb className={`w-5 h-5 mt-0.5 ${recommendation.priority === 1 ? 'text-red-500' : recommendation.priority === 2 ? 'text-yellow-500' : 'text-blue-500'}`} />
+        <Lightbulb className={`w-5 h-5 mt-0.5 ${recommendation.priority === 1 ? 'text-red-600' : recommendation.priority === 2 ? 'text-yellow-600' : 'text-blue-600'}`} />
         <div className="flex-1">
           <p className="text-gray-300 text-sm">{recommendation.description}</p>
           <div className="flex items-center gap-4 mt-2">
@@ -339,18 +339,18 @@ export default function CostDashboard() {
 
   if (loading && !stats) {
     return (
-      <div className="flex items-center justify-center h-full">
-        <RefreshCw className="w-8 h-8 text-orange-500 animate-spin" />
+      <div className="flex items-center justify-center h-full bg-gray-900">
+        <RefreshCw className="w-8 h-8 text-orange-600 animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="p-6 space-y-6 overflow-y-auto h-full">
+    <div className="p-6 space-y-6 overflow-y-auto h-full bg-gray-900">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <BarChart3 className="w-8 h-8 text-orange-500" />
+          <BarChart3 className="w-8 h-8 text-orange-600" />
           <div>
             <h2 className="text-xl font-bold text-white">Cost Dashboard</h2>
             <p className="text-sm text-gray-400">Monitor usage and manage budgets</p>
@@ -372,7 +372,7 @@ export default function CostDashboard() {
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeTab === tab
-                ? 'bg-orange-500/20 text-orange-500'
+                ? 'bg-orange-700/20 text-orange-600'
                 : 'text-gray-400 hover:text-white hover:bg-gray-700'
             }`}
           >
@@ -420,7 +420,7 @@ export default function CostDashboard() {
           {Object.keys(stats.cost_by_provider).length > 0 && (
             <div className="bg-gray-800 rounded-xl p-4 border border-gray-700">
               <h3 className="text-lg font-medium text-white mb-4 flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-orange-500" />
+                <TrendingUp className="w-5 h-5 text-orange-600" />
                 Cost by Provider
               </h3>
               <div className="space-y-3">
@@ -474,13 +474,13 @@ export default function CostDashboard() {
                 placeholder="Search models..."
                 value={modelFilter}
                 onChange={e => setModelFilter(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-600"
               />
             </div>
             <select
               value={providerFilter || ''}
               onChange={e => setProviderFilter(e.target.value || null)}
-              className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-600"
             >
               <option value="">All Providers</option>
               {providers.map(p => (
@@ -509,7 +509,7 @@ export default function CostDashboard() {
           {/* Budget Progress */}
           <div className="bg-gray-800 rounded-xl p-4 border border-gray-700">
             <h3 className="text-lg font-medium text-white mb-4 flex items-center gap-2">
-              <DollarSign className="w-5 h-5 text-orange-500" />
+              <DollarSign className="w-5 h-5 text-orange-600" />
               Budget Status
             </h3>
             <BudgetProgress
@@ -540,7 +540,7 @@ export default function CostDashboard() {
           {/* Budget Settings */}
           <div className="bg-gray-800 rounded-xl p-4 border border-gray-700">
             <h3 className="text-lg font-medium text-white mb-4 flex items-center gap-2">
-              <Settings2 className="w-5 h-5 text-orange-500" />
+              <Settings2 className="w-5 h-5 text-orange-600" />
               Budget Configuration
             </h3>
             <div className="grid md:grid-cols-2 gap-4">
@@ -550,7 +550,7 @@ export default function CostDashboard() {
                   type="number"
                   value={budget.max_cost_per_day || ''}
                   placeholder="No limit"
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-600"
                   readOnly
                 />
               </div>
@@ -560,7 +560,7 @@ export default function CostDashboard() {
                   type="number"
                   value={budget.max_cost_per_hour || ''}
                   placeholder="No limit"
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-600"
                   readOnly
                 />
               </div>
@@ -569,13 +569,13 @@ export default function CostDashboard() {
                 <input
                   type="text"
                   value={`${(budget.alert_threshold * 100).toFixed(0)}%`}
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-600"
                   readOnly
                 />
               </div>
               <div>
                 <label className="block text-sm text-gray-400 mb-1">Enforce Limits</label>
-                <div className={`px-3 py-2 rounded-lg ${budget.enforce_limits ? 'bg-green-500/20 text-green-500' : 'bg-gray-700 text-gray-400'}`}>
+                <div className={`px-3 py-2 rounded-lg ${budget.enforce_limits ? 'bg-green-600/20 text-green-500' : 'bg-gray-700 text-gray-400'}`}>
                   {budget.enforce_limits ? 'Enabled' : 'Disabled'}
                 </div>
               </div>

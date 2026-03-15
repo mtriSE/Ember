@@ -11,6 +11,23 @@
 
 **One binary. Zero dependencies. Rust-powered. Privacy-first.**
 
+<p align="center">
+  <img src="assets/screenshots/chat.png" alt="Ember Chat Interface" width="800"/>
+</p>
+
+<table>
+  <tr>
+    <td><img src="assets/screenshots/overview.png" alt="Dashboard Overview" width="280"/></td>
+    <td><img src="assets/screenshots/models.png" alt="Model Registry" width="280"/></td>
+    <td><img src="assets/screenshots/budget.png" alt="Budget Management" width="280"/></td>
+  </tr>
+  <tr>
+    <td align="center"><em>Cost Dashboard</em></td>
+    <td align="center"><em>Model Registry</em></td>
+    <td align="center"><em>Budget Management</em></td>
+  </tr>
+</table>
+
 </div>
 
 ---

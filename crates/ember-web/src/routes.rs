@@ -5,23 +5,65 @@
 use crate::handlers;
 use crate::state::AppState;
 use crate::websocket::{get_streams_info, websocket_handler};
+use axum::body::Body;
+use axum::http::{header, Response, StatusCode};
+use axum::response::IntoResponse;
 use axum::routing::{delete, get, post, put};
 use axum::Router;
+use rust_embed::Embed;
 use tower_http::cors::{Any, CorsLayer};
 use tower_http::services::ServeDir;
 use tower_http::trace::TraceLayer;
 
-/// Create the main application router.
-///
-/// # Arguments
-///
-/// * `state` - Shared application state
-///
-/// # Returns
-///
-/// Configured Axum router with all routes.
-pub fn create_router(state: AppState) -> Router {
-    let api_routes = Router::new()
+/// Embedded static files from the static directory.
+#[derive(Embed)]
+#[folder = "static/"]
+struct StaticAssets;
+
+/// Handler for serving embedded static files.
+async fn serve_embedded(path: axum::extract::Path<String>) -> impl IntoResponse {
+    let path = path.0;
+    serve_embedded_file(&path)
+}
+
+/// Handler for serving the index.html file.
+async fn serve_index() -> impl IntoResponse {
+    serve_embedded_file("index.html")
+}
+
+/// Serve an embedded file by path.
+fn serve_embedded_file(path: &str) -> Response<Body> {
+    match StaticAssets::get(path) {
+        Some(content) => {
+            let mime = mime_guess::from_path(path).first_or_octet_stream();
+            Response::builder()
+                .status(StatusCode::OK)
+                .header(header::CONTENT_TYPE, mime.as_ref())
+                .body(Body::from(content.data.to_vec()))
+                .unwrap()
+        }
+        None => {
+            // For SPA routing, serve index.html for non-API, non-asset paths
+            if !path.starts_with("api/") && !path.contains('.') {
+                if let Some(content) = StaticAssets::get("index.html") {
+                    return Response::builder()
+                        .status(StatusCode::OK)
+                        .header(header::CONTENT_TYPE, "text/html")
+                        .body(Body::from(content.data.to_vec()))
+                        .unwrap();
+                }
+            }
+            Response::builder()
+                .status(StatusCode::NOT_FOUND)
+                .body(Body::from("Not Found"))
+                .unwrap()
+        }
+    }
+}
+
+/// Create the API routes without any static file serving.
+fn create_api_routes() -> Router<AppState> {
+    Router::new()
         // Health & Info
         .route("/health", get(handlers::health))
         .route("/info", get(handlers::info))
@@ -46,7 +88,58 @@ pub fn create_router(state: AppState) -> Router {
         .route("/recommendations", get(handlers::get_recommendations))
         // WebSocket & Streaming
         .route("/ws", get(websocket_handler))
-        .route("/streams", get(get_streams_info));
+        .route("/streams", get(get_streams_info))
+}
+
+/// Create the main application router with embedded static files.
+///
+/// This is the default router that serves the embedded frontend UI.
+///
+/// # Arguments
+///
+/// * `state` - Shared application state
+///
+/// # Returns
+///
+/// Configured Axum router with all routes and embedded static file serving.
+pub fn create_router(state: AppState) -> Router {
+    let api_routes = create_api_routes();
+
+    let mut router = Router::new()
+        .nest("/api/v1", api_routes)
+        // Serve embedded static files
+        .route("/", get(serve_index))
+        .route("/*path", get(serve_embedded))
+        .with_state(state.clone());
+
+    // Add CORS if enabled
+    if state.config.cors_enabled {
+        let cors = CorsLayer::new()
+            .allow_origin(Any)
+            .allow_methods(Any)
+            .allow_headers(Any);
+        router = router.layer(cors);
+    }
+
+    // Add request tracing
+    router = router.layer(TraceLayer::new_for_http());
+
+    router
+}
+
+/// Create the main application router without static file serving.
+///
+/// Use this for API-only deployments or when running the frontend separately.
+///
+/// # Arguments
+///
+/// * `state` - Shared application state
+///
+/// # Returns
+///
+/// Configured Axum router with API routes only.
+pub fn create_router_api_only(state: AppState) -> Router {
+    let api_routes = create_api_routes();
 
     let mut router = Router::new()
         .nest("/api/v1", api_routes)

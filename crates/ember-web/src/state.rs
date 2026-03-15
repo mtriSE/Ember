@@ -115,25 +115,30 @@ pub struct AppState {
 impl AppState {
     /// Create a new application state.
     pub fn new(config: ServerConfig) -> Self {
-        let llm_provider: Arc<dyn LLMProvider> = match config.llm_provider {
+        let (llm_provider, effective_config): (Arc<dyn LLMProvider>, ServerConfig) = match config.llm_provider {
             LLMProviderType::OpenAI => {
                 // Try to create OpenAI provider from env, fallback to Ollama if no API key
                 match OpenAIProvider::from_env() {
-                    Ok(provider) => Arc::new(provider),
+                    Ok(provider) => (Arc::new(provider), config),
                     Err(e) => {
                         warn!(
                             error = %e,
                             "OpenAI provider unavailable, falling back to Ollama"
                         );
-                        Arc::new(OllamaProvider::from_env())
+                        // When falling back to Ollama, also change the default model
+                        // Using tinyllama for lower memory usage
+                        let mut fallback_config = config;
+                        fallback_config.llm_provider = LLMProviderType::Ollama;
+                        fallback_config.default_model = "tinyllama".to_string();
+                        (Arc::new(OllamaProvider::from_env()), fallback_config)
                     }
                 }
             }
-            LLMProviderType::Ollama => Arc::new(OllamaProvider::from_env()),
+            LLMProviderType::Ollama => (Arc::new(OllamaProvider::from_env()), config),
         };
 
         Self {
-            config,
+            config: effective_config,
             active_conversations: Arc::new(RwLock::new(0)),
             started_at: chrono::Utc::now(),
             llm_provider,

@@ -56,6 +56,10 @@ async-stream = "0.3"
 # Template engine (optional)
 askama = { version = "0.12", optional = true }
 
+# Embedded static files
+rust-embed = "8.5"
+mime_guess = "2.0"
+
 [dev-dependencies]
 tokio-test = "0.4"
 reqwest = { workspace = true }
