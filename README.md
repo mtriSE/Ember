@@ -31,14 +31,18 @@ Contact: [niklas.marder@gmail.com](mailto:niklas.marder@gmail.com)
 
 > **"The first AI agent framework that respects your time, your memory, and your privacy."**
 
-| Traditional Agents | Ember |
-|:---:|:---:|
-| Minutes to install | **Seconds** |
-| Gigabytes of RAM | **Megabytes** |
-| Hundreds of dependencies | **Zero** |
-| Requires internet | **Works offline** |
-| Python runtime needed | **Single binary** |
-| "It worked on my machine" | **If it compiles, it runs** |
+<table>
+<tr>
+<th width="50%">Traditional Agents</th>
+<th width="50%">Ember</th>
+</tr>
+<tr><td align="center">Minutes to install</td><td align="center"><b>Seconds</b></td></tr>
+<tr><td align="center">Gigabytes of RAM</td><td align="center"><b>Megabytes</b></td></tr>
+<tr><td align="center">Hundreds of dependencies</td><td align="center"><b>Zero</b></td></tr>
+<tr><td align="center">Requires internet</td><td align="center"><b>Works offline</b></td></tr>
+<tr><td align="center">Python runtime needed</td><td align="center"><b>Single binary</b></td></tr>
+<tr><td align="center">"It worked on my machine"</td><td align="center"><b>If it compiles, it runs</b></td></tr>
+</table>
 
 **Ember is not an incremental improvement.**  
 **It's a complete reimagining of what an AI agent should be.**
