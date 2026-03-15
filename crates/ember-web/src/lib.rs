@@ -156,8 +156,8 @@ impl Server {
 pub mod prelude {
     pub use crate::error::{ErrorResponse, Result, WebError};
     pub use crate::handlers::{
-        ChatRequest, ChatResponse, HealthResponse, InfoResponse, ModelsResponse,
-        ReadinessResponse, StreamEvent, ToolsResponse,
+        ChatRequest, ChatResponse, HealthResponse, InfoResponse, ModelsResponse, ReadinessResponse,
+        StreamEvent, ToolsResponse,
     };
     pub use crate::routes::{create_router, create_router_with_static};
     pub use crate::state::{AppState, LLMProviderType, ServerConfig};
