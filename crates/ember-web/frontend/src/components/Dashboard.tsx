@@ -1,12 +1,12 @@
 import {
-    Activity, Bot, Boxes,
-    ChevronRight,
-    Flame,
-    Globe,
-    LayoutDashboard,
-    MessageSquare, Network, Play, RefreshCw, Settings, Shield,
-    Sparkles,
-    Terminal, TrendingUp, Users, Wrench, Zap
+  Activity, Bot, Boxes,
+  ChevronRight,
+  Flame,
+  Globe,
+  LayoutDashboard,
+  MessageSquare, Network, Play, RefreshCw, Settings, Shield,
+  Sparkles,
+  Terminal, TrendingUp, Users, Wrench, Zap
 } from 'lucide-react'
 import { useCallback, useState } from 'react'
 
@@ -99,11 +99,6 @@ function formatUptime(seconds: number): string {
   const hours = Math.floor((seconds % 86400) / 3600)
   const minutes = Math.floor((seconds % 3600) / 60)
   return `${days}d ${hours}h ${minutes}m`
-}
-
-function formatDate(dateStr: string): string {
-  const date = new Date(dateStr)
-  return date.toLocaleString()
 }
 
 // Components
@@ -304,9 +299,9 @@ function ToolRow({ tool, onToggle }: { tool: ToolInfo; onToggle: () => void }) {
 // Main Dashboard Component
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<'overview' | 'agents' | 'tasks' | 'tools' | 'plugins'>('overview')
-  const [metrics, setMetrics] = useState<SystemMetrics>(mockMetrics)
-  const [agents, setAgents] = useState<AgentInfo[]>(mockAgents)
-  const [tasks, setTasks] = useState<TaskInfo[]>(mockTasks)
+  const [metrics, _setMetrics] = useState<SystemMetrics>(mockMetrics)
+  const [agents, _setAgents] = useState<AgentInfo[]>(mockAgents)
+  const [tasks, _setTasks] = useState<TaskInfo[]>(mockTasks)
   const [tools, setTools] = useState<ToolInfo[]>(mockTools)
   const [plugins, setPlugins] = useState<PluginInfo[]>(mockPlugins)
   const [isRefreshing, setIsRefreshing] = useState(false)

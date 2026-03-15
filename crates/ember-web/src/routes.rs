@@ -4,7 +4,7 @@
 
 use crate::handlers;
 use crate::state::AppState;
-use axum::routing::{delete, get, post};
+use axum::routing::{delete, get, post, put};
 use axum::Router;
 use tower_http::cors::{Any, CorsLayer};
 use tower_http::services::ServeDir;
@@ -34,8 +34,15 @@ pub fn create_router(state: AppState) -> Router {
         .route("/conversations/:id", delete(handlers::delete_conversation))
         // Models
         .route("/models", get(handlers::list_models))
+        .route("/models/extended", get(handlers::list_models_extended))
         // Tools
-        .route("/tools", get(handlers::list_tools));
+        .route("/tools", get(handlers::list_tools))
+        // Cost & Usage
+        .route("/costs/estimate", post(handlers::estimate_cost))
+        .route("/usage", get(handlers::get_usage_stats))
+        .route("/budget", get(handlers::get_budget_config))
+        .route("/budget", put(handlers::update_budget_config))
+        .route("/recommendations", get(handlers::get_recommendations));
 
     let mut router = Router::new()
         .nest("/api/v1", api_routes)
@@ -83,8 +90,15 @@ pub fn create_router_with_static(state: AppState, static_dir: &str) -> Router {
         .route("/conversations/:id", delete(handlers::delete_conversation))
         // Models
         .route("/models", get(handlers::list_models))
+        .route("/models/extended", get(handlers::list_models_extended))
         // Tools
-        .route("/tools", get(handlers::list_tools));
+        .route("/tools", get(handlers::list_tools))
+        // Cost & Usage
+        .route("/costs/estimate", post(handlers::estimate_cost))
+        .route("/usage", get(handlers::get_usage_stats))
+        .route("/budget", get(handlers::get_budget_config))
+        .route("/budget", put(handlers::update_budget_config))
+        .route("/recommendations", get(handlers::get_recommendations));
 
     // Static file service for frontend
     let serve_dir = ServeDir::new(static_dir);
@@ -128,8 +142,18 @@ pub mod paths {
     pub const CONVERSATION: &str = "/conversations/:id";
     /// Models list endpoint.
     pub const MODELS: &str = "/models";
+    /// Extended models list endpoint.
+    pub const MODELS_EXTENDED: &str = "/models/extended";
     /// Tools list endpoint.
     pub const TOOLS: &str = "/tools";
+    /// Cost estimation endpoint.
+    pub const COSTS_ESTIMATE: &str = "/costs/estimate";
+    /// Usage statistics endpoint.
+    pub const USAGE: &str = "/usage";
+    /// Budget configuration endpoint.
+    pub const BUDGET: &str = "/budget";
+    /// Recommendations endpoint.
+    pub const RECOMMENDATIONS: &str = "/recommendations";
 }
 
 #[cfg(test)]

@@ -23,6 +23,7 @@ tokio = { version = "1.0", features = ["full"] }
 tokio-stream = "0.1"
 
 # Internal dependencies
+ember-core = { path = "../ember-core" }
 ember-llm = { path = "../ember-llm" }
 
 # Serialization

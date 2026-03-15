@@ -1,6 +1,7 @@
-import { Bot, Flame, Loader2, Send, Settings, Trash2, User } from 'lucide-react'
+import { BarChart3, Bot, Flame, Loader2, MessageSquare, Send, Settings, Trash2, User } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
+import CostDashboard from './components/CostDashboard'
 
 interface Message {
   id: string
@@ -31,6 +32,7 @@ export default function App() {
   const [selectedModel, setSelectedModel] = useState('')
   const [serverInfo, setServerInfo] = useState<ServerInfo | null>(null)
   const [showSettings, setShowSettings] = useState(false)
+  const [activeView, setActiveView] = useState<'chat' | 'dashboard'>('chat')
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -175,33 +177,80 @@ export default function App() {
             )}
           </div>
         </div>
+        
+        {/* Navigation Tabs */}
+        <div className="flex items-center gap-1 bg-gray-700/50 rounded-lg p-1">
+          <button
+            onClick={() => setActiveView('chat')}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+              activeView === 'chat'
+                ? 'bg-orange-500 text-white'
+                : 'text-gray-400 hover:text-white'
+            }`}
+            title="Chat"
+          >
+            <MessageSquare className="w-4 h-4" />
+            <span className="hidden sm:inline">Chat</span>
+          </button>
+          <button
+            onClick={() => setActiveView('dashboard')}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+              activeView === 'dashboard'
+                ? 'bg-orange-500 text-white'
+                : 'text-gray-400 hover:text-white'
+            }`}
+            title="Dashboard"
+          >
+            <BarChart3 className="w-4 h-4" />
+            <span className="hidden sm:inline">Dashboard</span>
+          </button>
+        </div>
+
         <div className="flex items-center gap-2">
-          <select
-            value={selectedModel}
-            onChange={e => setSelectedModel(e.target.value)}
-            className="px-3 py-1.5 text-sm bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
-          >
-            {models.map(model => (
-              <option key={model.id} value={model.id}>
-                {model.name}
-              </option>
-            ))}
-          </select>
-          <button
-            onClick={() => setShowSettings(!showSettings)}
-            className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors"
-          >
-            <Settings className="w-5 h-5" />
-          </button>
-          <button
-            onClick={clearChat}
-            className="p-2 text-gray-400 hover:text-red-400 hover:bg-gray-700 rounded-lg transition-colors"
-          >
-            <Trash2 className="w-5 h-5" />
-          </button>
+          {activeView === 'chat' && (
+            <>
+              <select
+                value={selectedModel}
+                onChange={e => setSelectedModel(e.target.value)}
+                className="px-3 py-1.5 text-sm bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                title="Select Model"
+                aria-label="Select Model"
+              >
+                {models.map(model => (
+                  <option key={model.id} value={model.id}>
+                    {model.name}
+                  </option>
+                ))}
+              </select>
+              <button
+                onClick={() => setShowSettings(!showSettings)}
+                className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors"
+                title="Settings"
+              >
+                <Settings className="w-5 h-5" />
+              </button>
+              <button
+                onClick={clearChat}
+                className="p-2 text-gray-400 hover:text-red-400 hover:bg-gray-700 rounded-lg transition-colors"
+                title="Clear Chat"
+              >
+                <Trash2 className="w-5 h-5" />
+              </button>
+            </>
+          )}
         </div>
       </header>
 
+      {/* Dashboard View */}
+      {activeView === 'dashboard' && (
+        <div className="flex-1 overflow-hidden">
+          <CostDashboard />
+        </div>
+      )}
+
+      {/* Chat View */}
+      {activeView === 'chat' && (
+        <>
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.length === 0 && !streamingContent && (
@@ -303,6 +352,8 @@ export default function App() {
           Press Enter to send, Shift+Enter for new line
         </p>
       </div>
+        </>
+      )}
     </div>
   )
 }

@@ -2,6 +2,7 @@
 //!
 //! This module defines the shared state available to all handlers.
 
+use ember_core::CostPredictor;
 use ember_llm::{LLMProvider, OllamaProvider, OpenAIProvider};
 use std::sync::Arc;
 use tokio::sync::RwLock;
@@ -104,6 +105,8 @@ pub struct AppState {
     pub started_at: chrono::DateTime<chrono::Utc>,
     /// LLM provider instance.
     pub llm_provider: Arc<dyn LLMProvider>,
+    /// Cost predictor for budget management.
+    pub cost_predictor: Arc<CostPredictor>,
 }
 
 impl AppState {
@@ -131,6 +134,7 @@ impl AppState {
             active_conversations: Arc::new(RwLock::new(0)),
             started_at: chrono::Utc::now(),
             llm_provider,
+            cost_predictor: Arc::new(CostPredictor::default()),
         }
     }
 
@@ -141,6 +145,7 @@ impl AppState {
             active_conversations: Arc::new(RwLock::new(0)),
             started_at: chrono::Utc::now(),
             llm_provider: provider,
+            cost_predictor: Arc::new(CostPredictor::default()),
         }
     }
 

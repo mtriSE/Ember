@@ -1367,6 +1367,7 @@ dependencies = [
  "async-stream",
  "axum",
  "chrono",
+ "ember-core",
  "ember-llm",
  "futures-util",
  "http",
