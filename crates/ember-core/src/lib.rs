@@ -94,6 +94,7 @@ mod collaboration;
 mod config;
 mod context;
 mod conversation;
+mod cost_predictor;
 mod error;
 mod knowledge_graph;
 mod memory;
@@ -156,6 +157,10 @@ pub use task_planner::{
     PlannerConfig as TaskPlannerConfig, PlannerConfigBuilder as TaskPlannerConfigBuilder,
     PlannerStats, ProgressCallback, Task, TaskComplexity, TaskExecutor, TaskId, TaskPlanBuilder,
     TaskPlanner, TaskPriority, TaskStatus, TaskType,
+};
+pub use cost_predictor::{
+    BudgetAlert, BudgetConfig, CostPredictor, CostRecommendation, PredictionResult, UsageRecord,
+    UsageStats,
 };
 
 /// Re-export commonly used types from ember-llm

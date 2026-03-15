@@ -52,6 +52,22 @@ pub mod ollama;
 #[cfg(feature = "groq")]
 pub mod groq;
 
+#[cfg(feature = "gemini")]
+pub mod gemini;
+
+#[cfg(feature = "mistral")]
+pub mod mistral;
+
+#[cfg(feature = "deepseek")]
+pub mod deepseek;
+
+#[cfg(feature = "openrouter")]
+pub mod openrouter;
+
+#[cfg(feature = "xai")]
+pub mod xai;
+
+pub mod model_registry;
 pub mod router;
 
 #[cfg(any(test, feature = "mock"))]
@@ -74,6 +90,22 @@ pub use ollama::OllamaProvider;
 #[cfg(feature = "groq")]
 pub use groq::GroqProvider;
 
+#[cfg(feature = "gemini")]
+pub use gemini::GeminiProvider;
+
+#[cfg(feature = "mistral")]
+pub use mistral::MistralProvider;
+
+#[cfg(feature = "deepseek")]
+pub use deepseek::DeepSeekProvider;
+
+#[cfg(feature = "openrouter")]
+pub use openrouter::OpenRouterProvider;
+
+#[cfg(feature = "xai")]
+pub use xai::XAIProvider;
+
+pub use model_registry::{CostEstimate, ModelCapabilities, ModelMetadata, ModelRegistry, MODEL_REGISTRY};
 pub use retry::{complete_with_retry, RetryConfig};
 pub use router::LLMRouter;
 

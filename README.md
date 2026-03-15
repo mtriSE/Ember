@@ -230,12 +230,43 @@ Run 100% offline with Ollama. Your data never leaves your machine.
 
 ## Supported Providers
 
-| Provider | Status | Best For |
-|---|---|---|
-| **OpenAI** | Stable | General purpose, GPT-4o |
-| **Anthropic** | Stable | Coding, Claude 3.5 Sonnet |
-| **Ollama** | Stable | Privacy, offline, free |
-| **Groq** | Stable | Speed (ultra-fast inference) |
+| Provider | Status | Models | Best For |
+|---|---|---|---|
+| **OpenAI** | Stable | GPT-4o, GPT-4o-mini, o1, o3-mini | General purpose, reasoning |
+| **Anthropic** | Stable | Claude 3.5 Sonnet, Haiku, Opus | Coding, analysis |
+| **Google Gemini** | Stable | Gemini 2.0 Flash, 1.5 Pro/Flash | Multimodal, long context (2M tokens!) |
+| **DeepSeek** | Stable | DeepSeek V3, R1 (Reasoner) | Cost-effective, reasoning |
+| **Mistral** | Stable | Mistral Large, Small, Codestral, Pixtral | European AI, coding |
+| **xAI Grok** | Stable | Grok 2, Grok 2 Mini, Vision | Real-time knowledge |
+| **Groq** | Stable | Llama 3.3 70B, Mixtral | Ultra-fast inference |
+| **OpenRouter** | Stable | 200+ models via single API | Access any model |
+| **Ollama** | Stable | Llama 3.2, Qwen, DeepSeek R1, etc. | Privacy, offline, free |
+
+### Model Registry with Cost Tracking
+
+Ember includes a comprehensive model registry with:
+- Real-time pricing information for all models
+- Capability detection (vision, tools, reasoning, audio)
+- Context window limits
+- **Cost Predictor**: Estimate costs before making API calls
+- **Budget Alerts**: Set daily/hourly limits, get warnings
+
+```rust
+use ember_core::CostPredictor;
+
+// Predict cost before making expensive API calls
+let predictor = CostPredictor::default();
+let result = predictor.predict("gpt-4o", 5000, 2000);
+
+if !result.allowed {
+    println!("Budget exceeded! Estimated: {}", result.estimate.format());
+}
+
+// Get cheaper alternatives
+for rec in result.recommendations {
+    println!("{} - Save ${:.4}", rec.description, rec.potential_savings);
+}
+```
 
 ---
 
@@ -280,6 +311,86 @@ docker pull ghcr.io/niklasmarderx/Ember
 | WASM Plugins | No | No | No | No | **Yes** |
 | Type Safe | No | No | No | No | **Yes** |
 | Memory Safe | No | No | No | No | **Yes** |
+| **9+ LLM Providers** | Partial | Partial | Partial | Partial | **Yes** |
+| **Cost Tracking** | No | No | No | No | **Yes** |
+| **Model Registry** | No | No | No | No | **Yes** |
+| **Budget Alerts** | No | No | No | No | **Yes** |
+| **Multi-Agent Orchestration** | Limited | No | Yes | No | **Yes** |
+| **Knowledge Graph** | No | No | No | No | **Yes** |
+| **Self-Healing** | No | No | No | No | **Yes** |
+| **Privacy Shield (PII)** | No | No | No | No | **Yes** |
+| **Security Sandbox** | No | No | No | No | **Yes** |
+
+---
+
+## Advanced Features
+
+### Multi-Agent Orchestration
+Create teams of specialized agents that collaborate on complex tasks:
+
+```rust
+use ember_core::{Orchestrator, AgentRole, WorkflowBuilder};
+
+let orchestrator = Orchestrator::new();
+
+// Create specialized agents
+orchestrator.spawn_agent("researcher", AgentRole::Researcher).await?;
+orchestrator.spawn_agent("coder", AgentRole::Coder).await?;
+orchestrator.spawn_agent("reviewer", AgentRole::Reviewer).await?;
+
+// Define workflow
+let workflow = WorkflowBuilder::new()
+    .step("researcher", "Research best practices for API design")
+    .step("coder", "Implement the API based on research")
+    .step("reviewer", "Review and suggest improvements")
+    .build();
+
+orchestrator.execute(workflow).await?;
+```
+
+### Knowledge Graph
+Build and query semantic knowledge graphs:
+
+```rust
+use ember_core::KnowledgeGraph;
+
+let kg = KnowledgeGraph::new();
+
+// Add entities and relationships
+kg.add_entity("Rust", "Programming Language")?;
+kg.add_entity("Ember", "AI Framework")?;
+kg.add_relationship("Ember", "written_in", "Rust")?;
+
+// Query relationships
+let results = kg.query("What is Ember written in?").await?;
+```
+
+### Self-Healing System
+Automatic error recovery and circuit breakers:
+
+```rust
+use ember_core::SelfHealingSystem;
+
+let healing = SelfHealingSystem::new();
+
+// Automatically retries, falls back, or recovers
+healing.execute_with_recovery(|| async {
+    agent.chat("Complex task").await
+}).await?;
+```
+
+### Privacy Shield
+Automatic PII detection and redaction:
+
+```rust
+use ember_core::{PrivacyShield, PrivacyLevel};
+
+let shield = PrivacyShield::new(PrivacyLevel::Strict);
+
+// Automatically redacts PII before sending to LLM
+let safe_input = shield.sanitize("Email me at john@example.com")?;
+// Result: "Email me at [EMAIL_REDACTED]"
+```
 
 ---
 
