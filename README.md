@@ -6,6 +6,7 @@
 
 ### The AI Agent That Starts in 30 Seconds, Not 30 Minutes
 
+[![Website](https://img.shields.io/badge/website-ember.dev-orange)](https://niklasmarderx.github.io/Ember/)
 [![Crates.io](https://img.shields.io/crates/v/ember-cli)](https://crates.io/crates/ember-cli)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE-MIT)
 [![CI](https://github.com/niklasmarderx/Ember/actions/workflows/ci.yml/badge.svg)](https://github.com/niklasmarderx/Ember/actions)
