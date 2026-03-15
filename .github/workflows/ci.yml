@@ -24,7 +24,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
         
       - name: Check
-        run: cargo check --workspace --all-features
+        run: cargo check --workspace
 
   test:
     name: Test
@@ -42,7 +42,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
         
       - name: Run tests
-        run: cargo test --workspace --all-features
+        run: cargo test --workspace
 
   fmt:
     name: Format
@@ -73,7 +73,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
         
       - name: Clippy
-        run: cargo clippy --workspace --all-features -- -D warnings
+        run: cargo clippy --workspace -- -D warnings
 
   docs:
     name: Documentation

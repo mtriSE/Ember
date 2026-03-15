@@ -41,5 +41,5 @@ tokio = { version = "1", features = ["full", "test-util"] }
 
 [features]
 default = []
-# Enable fetcher feature for downloading browser
-fetcher = ["chromiumoxide/fetcher"]
+# Note: The chromiumoxide/fetcher feature is currently broken in v0.7
+# Users should install Chrome/Chromium manually
