@@ -1,477 +1,270 @@
+<div align="center">
+
+```
+                     
+                   ╱ ╲
+                  ╱   ╲
+                 ╱  ▲  ╲
+                ╱  ╱ ╲  ╲
+               ╱  ╱   ╲  ╲
+              ╱  ╱  ◆  ╲  ╲
+             ╱  ╱       ╲  ╲
+            ███████████████
+                EMBER
+```
+
 # Ember
 
-**The Rust AI Agent Framework That Just Works**
+### The AI Agent That Starts in 30 Seconds, Not 30 Minutes
 
-[![Crates.io](https://img.shields.io/crates/v/ember)](https://crates.io/crates/ember)
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE-MIT)
-[![CI](https://github.com/ember/ember/actions/workflows/ci.yml/badge.svg)](https://github.com/ember/ember/actions)
-[![Discord](https://img.shields.io/discord/123456789?label=discord)](https://discord.gg/ember)
+[![Crates.io](https://img.shields.io/crates/v/ember-cli)](https://crates.io/crates/ember-cli)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE-MIT)
+[![CI](https://github.com/niklasmarderx/Ember/actions/workflows/ci.yml/badge.svg)](https://github.com/niklasmarderx/Ember/actions)
+[![Docker](https://img.shields.io/docker/pulls/niklasmarderx/ember)](https://hub.docker.com/r/niklasmarderx/ember)
+
+**One binary. Zero dependencies. Rust-powered. Privacy-first.**
+
+[Quick Start](#-quick-start-30-seconds) |
+[Why Ember](#-why-ember) |
+[Features](#-features) |
+[Documentation](https://ember.dev/docs)
+
+</div>
 
 ---
 
-## Why Ember?
+## The Problem
 
-| Problem | Other Frameworks | Ember |
-|---------|-----------------|-------|
-| Setup Time | 30+ minutes, Python/Node deps | **30 seconds, single binary** |
-| Memory Usage | 500MB+ RAM | **< 50MB RAM** |
-| Startup Time | 2-5 seconds | **< 100ms** |
-| Dependencies | Hundreds of packages | **Zero runtime deps** |
-| Offline Mode | Requires internet | **100% offline capable** |
+You want to build an AI agent. You try the popular Python frameworks:
+
+```bash
+# What you expect:
+pip install langchain && python agent.py
+
+# What you get:
+pip install langchain  # 500+ dependencies, 15 minutes
+# Dependency conflicts, version mismatches, "works on my machine"
+# 2GB RAM usage, 5 second cold starts
+# Internet required, API keys scattered everywhere
+```
+
+**We built Ember because we were tired of this.**
+
+---
+
+## The Solution
+
+```bash
+# Install (5 seconds)
+curl -fsSL https://ember.dev/install.sh | sh
+
+# Chat (25 seconds)
+ember chat "Write me a Python script that finds all TODOs in my codebase"
+```
+
+**That's it.** No Python. No Node.js. No Docker. No environment variables. Works offline with local models.
+
+---
+
+## Speed Comparison
+
+| | LangChain | AutoGPT | CrewAI | **Ember** |
+|---|---|---|---|---|
+| **Install Time** | 15 min | 20 min | 10 min | **5 sec** |
+| **Cold Start** | 2.3s | 4.1s | 1.8s | **80ms** |
+| **Memory** | 450MB | 800MB | 380MB | **45MB** |
+| **Dependencies** | 500+ | 300+ | 200+ | **0** |
+| **Works Offline** | No | No | No | **Yes** |
+
+*Measured on M2 MacBook Pro. [See benchmarks](docs/benchmarks.md)*
 
 ---
 
 ## Quick Start (30 Seconds)
 
-### From GitHub (Recommended for Developers)
-
-```bash
-# Clone and run the quickstart script
-git clone https://github.com/ember/ember
-cd ember
-./quickstart.sh
-```
-
-The script will:
-1. Check/install Rust if needed
-2. Build Ember in release mode
-3. Create a default configuration
-4. Guide you through API key setup
-5. Optionally start a chat session
-
-### Pre-built Binary
+### Option A: Cloud APIs (OpenAI/Anthropic/Groq)
 
 ```bash
 # Install
 curl -fsSL https://ember.dev/install.sh | sh
 
-# Run
-ember chat
-```
-
-That's it. No Python. No Node.js. No Docker. No API keys required (works with local Ollama).
-
----
-
-## From Zero to Chat: Complete Setup Guide
-
-### Option A: Cloud API (OpenAI/Anthropic/Groq)
-
-```bash
-# 1. Install Ember
-curl -fsSL https://ember.dev/install.sh | sh
-
-# 2. Set your API key (choose one)
+# Set ONE environment variable
 export OPENAI_API_KEY="sk-..."
-# OR
-export ANTHROPIC_API_KEY="sk-ant-..."
-# OR (Groq - free tier available, very fast!)
-export GROQ_API_KEY="gsk_..."
 
-# 3. Start chatting
+# Start chatting
 ember chat
 ```
 
-### Option B: 100% Free and Offline (Ollama)
+### Option B: 100% Free and Offline
 
-No API keys, no internet, no costs. Perfect for privacy-conscious users.
+**No API keys. No internet. No costs. Complete privacy.**
 
 ```bash
-# 1. Install Ollama (https://ollama.ai)
+# Install Ollama (one time)
 curl -fsSL https://ollama.ai/install.sh | sh
-
-# 2. Download a model (once, ~4GB for llama3.2)
 ollama pull llama3.2
 
-# 3. Install Ember
+# Install Ember
 curl -fsSL https://ember.dev/install.sh | sh
 
-# 4. Start chatting - completely offline
-ember chat --provider ollama --model llama3.2
+# Chat - completely offline
+ember chat --provider ollama
 ```
 
-### CLI Commands
+### Option C: Docker (One Command)
 
 ```bash
-# Interactive chat mode
-ember chat
-
-# One-shot question
-ember chat "What is the capital of France?"
-
-# Use specific model
-ember chat --model gpt-4o "Explain quantum computing"
-
-# Use Anthropic Claude
-ember chat --provider anthropic --model claude-3-5-sonnet-latest "Hello"
-
-# Use local Ollama (no internet required)
-ember chat --provider ollama --model llama3.2 "Hello"
-
-# Enable tools (shell, filesystem, web)
-ember chat --tools shell,filesystem "Create a new Python project"
+docker run -it --rm ghcr.io/niklasmarderx/Ember chat "Hello!"
 ```
 
-### Build from Source
+---
+
+## What Can Ember Do?
+
+### 1. Chat with Any Model
 
 ```bash
-# Requires Rust 1.75+
-git clone https://github.com/ember/ember
-cd ember
-cargo build --release
+# OpenAI
+ember chat "Explain quantum computing"
 
-# Run directly
-./target/release/ember-cli chat
+# Anthropic Claude
+ember chat --provider anthropic "Review my code"
 
-# Or install globally
-cargo install --path crates/ember-cli
+# Local Ollama (free, private)
+ember chat --provider ollama "Write a haiku"
+
+# Groq (ultra-fast, free tier!)
+ember chat --provider groq "Summarize this paper"
 ```
 
----
+### 2. Execute Tasks with Tools
 
-## Feature Comparison
-
-| Feature | LangChain | AutoGPT | CrewAI | **Ember** |
-|---------|-----------|---------|--------|-----------|
-| Single Binary | No | No | No | **Yes** |
-| Rust Performance | No | No | No | **Yes** |
-| Memory Safe | No | No | No | **Yes** |
-| Offline First | No | No | No | **Yes** |
-| Built-in Tools | Via plugins | Limited | Yes | **Yes** |
-| Streaming | Yes | No | Yes | **Yes** |
-| Multi-Provider | Yes | Yes | Yes | **Yes** |
-| WASM Plugins | No | No | No | **Yes** |
-| Type Safe | No | No | No | **Yes** |
-| Sub-100ms Start | No | No | No | **Yes** |
-
----
-
-## Performance Benchmarks
-
-```
-Framework       | Cold Start | Memory | Requests/sec
-----------------|------------|--------|-------------
-LangChain       | 2.3s       | 450MB  | 12
-AutoGPT         | 4.1s       | 800MB  | 5
-CrewAI          | 1.8s       | 380MB  | 15
-Ember           | 0.08s      | 45MB   | 180
-                  ^^^^         ^^^^     ^^^^
-                  28x faster   10x less 12x more
+```bash
+# Create files, run commands, browse the web
+ember chat --tools shell,filesystem,web "Create a React app with dark mode"
 ```
 
-*Benchmark: Simple chat completion, measured on M2 MacBook Pro*
-
----
-
-## Code Examples
-
-### Basic Chat (4 lines)
+### 3. Build AI Applications (10 lines of Rust)
 
 ```rust
-use ember::{Agent, OllamaProvider};
+use ember::{Agent, OllamaProvider, tools};
 
 #[tokio::main]
 async fn main() -> Result<()> {
     let agent = Agent::builder()
         .provider(OllamaProvider::new()?)
+        .tool(tools::Shell::new())
+        .tool(tools::Filesystem::sandboxed("./workspace"))
         .build()?;
-    
-    let response = agent.chat("Hello!").await?;
-    println!("{}", response.content);
+
+    agent.chat("Build a REST API in Rust").await?;
     Ok(())
 }
-```
-
-### With Tools (10 lines)
-
-```rust
-use ember::{Agent, OpenAIProvider, tools};
-
-let agent = Agent::builder()
-    .provider(OpenAIProvider::from_env()?)
-    .system_prompt("You are a helpful assistant with access to tools.")
-    .tool(tools::Shell::new())
-    .tool(tools::Filesystem::sandboxed("./workspace"))
-    .tool(tools::Web::new())
-    .build()?;
-
-let response = agent.chat("Create a Python hello world script").await?;
-```
-
-### Streaming Response
-
-```rust
-let mut stream = agent.chat_stream("Tell me a story").await?;
-
-while let Some(chunk) = stream.next().await {
-    print!("{}", chunk?.content);
-    std::io::stdout().flush()?;
-}
-```
-
-### Multi-Provider Routing
-
-```rust
-use ember::{LLMRouter, OpenAIProvider, AnthropicProvider, OllamaProvider};
-
-let router = LLMRouter::new()
-    .route("gpt-*", OpenAIProvider::from_env()?)
-    .route("claude-*", AnthropicProvider::from_env()?)
-    .route("llama*", OllamaProvider::new()?)
-    .fallback(OllamaProvider::new()?);
-
-// Automatically routes to the right provider
-let response = router.complete("claude-3-opus", request).await?;
-```
-
-### Retry with Exponential Backoff
-
-```rust
-use ember::llm::{RetryConfig, complete_with_retry};
-
-let config = RetryConfig::for_rate_limits();
-let response = complete_with_retry(&provider, request, &config).await?;
-```
-
----
-
-## Architecture
-
-```
-                    +------------------+
-                    |    ember-cli     |  Command-line interface
-                    +--------+---------+
-                             |
-              +--------------+--------------+
-              |                             |
-    +---------v---------+         +---------v---------+
-    |    ember-core     |         |    ember-web      |
-    |  Agent Runtime    |         |   REST API + UI   |
-    +--------+----------+         +-------------------+
-             |
-    +--------v----------+
-    |    ember-llm      |  Provider abstraction
-    +---------+---------+
-              |
-    +---------+---------+---------+---------+
-    |         |         |         |         |
- OpenAI   Anthropic  Ollama    Groq    (more...)
-
-    +-------------------+
-    |   ember-tools     |  Shell, Filesystem, Web
-    +-------------------+
-
-    +-------------------+
-    |  ember-storage    |  SQLite, Vector DB
-    +-------------------+
-
-    +-------------------+
-    |  ember-plugins    |  WASM plugin runtime
-    +-------------------+
-```
-
----
-
-## Supported Providers
-
-| Provider | Status | Models |
-|----------|--------|--------|
-| **OpenAI** | Stable | GPT-4o, GPT-4, GPT-3.5-turbo |
-| **Anthropic** | Stable | Claude 3.5, Claude 3 |
-| **Ollama** | Stable | Llama 3.2, Mistral, Qwen, Phi, etc. |
-| **Groq** | Stable | Llama 3.3 70B, Mixtral 8x7B, Gemma2 (ultra-fast, free tier!) |
-| **Local** | Planned | llama.cpp integration |
-| **Google** | Planned | Gemini 2.0 |
-
----
-
-## Built-in Tools
-
-| Tool | Description | Safety |
-|------|-------------|--------|
-| **Shell** | Execute commands | Regex-validated, security levels |
-| **Filesystem** | Read/write files | Sandboxed directory |
-| **Web** | HTTP requests | Configurable limits |
-| **Browser** | Web automation | Headless by default |
-| **Code** | Execute Python/JS/Shell | Timeout-protected, output limits |
-| **Git** | Git operations | Configurable working directory |
-
----
-
-## Enterprise Features
-
-- **SSO Integration** - SAML, OIDC, LDAP
-- **Audit Logging** - Full request/response logging
-- **Rate Limiting** - Per-user, per-model limits
-- **Cost Tracking** - Token usage and cost analytics
-- **Self-Hosted** - Deploy on your infrastructure
-- **SLA Support** - 99.9% uptime guarantee
-
-Contact: niklas.marder@gmail.com
-
----
-
-## Installation
-
-### Single Binary (Recommended)
-
-```bash
-# macOS / Linux
-curl -fsSL https://ember.dev/install.sh | sh
-
-# Windows
-irm https://ember.dev/install.ps1 | iex
-
-# Homebrew
-brew install ember-agent
-
-# Cargo
-cargo install ember-cli
-```
-
-### Docker
-
-```bash
-# Quick start with Docker Compose (includes Ollama)
-docker compose up -d
-
-# Run a chat
-docker compose exec ember ember chat "Hello!"
-
-# Or use the image directly
-docker run -it --rm emberai/ember chat "Hello!"
-```
-
-### As a Library
-
-```toml
-# Cargo.toml
-[dependencies]
-ember = "0.1"
-ember-llm = "0.1"
-ember-tools = "0.1"
-tokio = { version = "1", features = ["full"] }
-```
-
----
-
-## Configuration
-
-```toml
-# ~/.ember/config.toml
-
-[default]
-provider = "ollama"
-model = "llama3.2"
-streaming = true
-
-[llm.openai]
-api_key = "${OPENAI_API_KEY}"
-default_model = "gpt-4o"
-
-[llm.anthropic]
-api_key = "${ANTHROPIC_API_KEY}"
-default_model = "claude-3-5-sonnet-latest"
-
-[llm.ollama]
-base_url = "http://localhost:11434"
-default_model = "llama3.2"
-
-[tools]
-shell.enabled = true
-shell.allowed_commands = ["ls", "cat", "grep", "find"]
-filesystem.enabled = true
-filesystem.sandbox = "~/ember-workspace"
-
-[agent]
-max_iterations = 10
-temperature = 0.7
-system_prompt = "You are Ember, a helpful AI assistant."
 ```
 
 ---
 
 ## Why Rust?
 
-1. **Memory Safety** - No null pointers, no data races, no segfaults
-2. **Performance** - Native speed, zero-cost abstractions
-3. **Single Binary** - No runtime dependencies, easy deployment
-4. **Reliability** - If it compiles, it works
-5. **Modern Tooling** - Cargo, rustfmt, clippy, docs.rs
+|   | Python | Rust |
+|---|---|---|
+| Memory Safety | Runtime errors | **Compile-time guarantees** |
+| Performance | Interpreted, GC pauses | **Native speed, zero-cost abstractions** |
+| Deployment | Python + pip + venv + deps | **Single 15MB binary** |
+| Reliability | "It works... sometimes" | **If it compiles, it works** |
+
+**Ember is built for developers who ship.**
 
 ---
 
-## Roadmap
+## Feature Highlights
 
-### v0.1 (Current)
-- [x] Core agent loop with ReAct pattern
-- [x] OpenAI, Anthropic, Ollama providers
-- [x] Groq provider (ultra-fast inference)
-- [x] Shell tool with regex-based security validation
-- [x] Git tool for repository operations
-- [x] Code execution tool (Python/JavaScript/Shell REPL)
-- [x] MCP (Model Context Protocol) client
-- [x] Thinking blocks parser for structured reasoning
-- [x] Streaming responses
-- [x] Retry with exponential backoff
-- [x] Plan/Act mode for complex tasks
-- [x] Checkpoints and undo/redo
-- [x] Vector memory with semantic search (local embeddings)
-- [x] Browser automation tool (chromiumoxide)
-- [x] Terminal UI (TUI) with ratatui
-- [x] Progress indicator with token stats
-- [x] One-liner installation script
-- [x] Docker support
-- [x] Quick start script (`./quickstart.sh`)
+### Multi-Provider Support
+Switch between OpenAI, Anthropic, Ollama, Groq with one flag. Add your own providers with 50 lines of code.
 
-### v0.2 (Current)
-- [x] WASM plugin system improvements (marketplace, hot-reload)
-- [x] Multi-agent collaboration (ACP protocol, shared memory, task delegation)
-- [x] Web UI dashboard (React/TypeScript)
-- [x] Custom tool SDK (SimpleTool, AsyncTool, ParamExtractor)
+### Built-in Tools
+Shell commands, file operations, web scraping, browser automation, Git operations, code execution - all sandboxed and secure.
 
-### v0.3 (Next)
-- [ ] Plugin marketplace hosting
-- [ ] Advanced RAG pipelines
-- [ ] Voice interface
-- [ ] Mobile companion app
+### WASM Plugins
+Extend Ember with plugins in any language that compiles to WASM. Hot-reload during development.
 
-### v1.0
-- [ ] Production-ready stability
-- [ ] Full documentation
-- [ ] Enterprise features
-- [ ] Performance optimization
+### Plan/Act Mode
+For complex tasks, Ember plans before acting. Review the plan, then execute with confidence.
+
+### Checkpoints
+Undo/redo any action. Never lose progress. Perfect for experimentation.
+
+### Privacy First
+Run 100% offline with Ollama. Your data never leaves your machine.
+
+---
+
+## Supported Providers
+
+| Provider | Status | Best For |
+|---|---|---|
+| **OpenAI** | Stable | General purpose, GPT-4o |
+| **Anthropic** | Stable | Coding, Claude 3.5 Sonnet |
+| **Ollama** | Stable | Privacy, offline, free |
+| **Groq** | Stable | Speed (ultra-fast inference) |
+
+---
+
+## Installation
+
+```bash
+# One-liner (macOS/Linux)
+curl -fsSL https://ember.dev/install.sh | sh
+
+# Homebrew
+brew install ember-agent
+
+# Cargo
+cargo install ember-cli
+
+# Docker
+docker pull ghcr.io/niklasmarderx/Ember
+```
+
+---
+
+## Documentation
+
+- [Getting Started Guide](https://ember.dev/docs/getting-started)
+- [CLI Reference](https://ember.dev/docs/cli)
+- [Building Custom Tools](https://ember.dev/docs/custom-tools)
+- [Provider Configuration](https://ember.dev/docs/providers)
+- [API Reference](https://docs.rs/ember)
+
+---
+
+## Comparison with Alternatives
+
+| Feature | LangChain | AutoGPT | CrewAI | OpenClaw | **Ember** |
+|---------|-----------|---------|--------|----------|-----------|
+| Language | Python | Python | Python | Python | **Rust** |
+| Single Binary | No | No | No | No | **Yes** |
+| Zero Dependencies | No | No | No | No | **Yes** |
+| Sub-100ms Start | No | No | No | No | **Yes** |
+| Memory < 50MB | No | No | No | No | **Yes** |
+| Works Offline | No | No | No | No | **Yes** |
+| WASM Plugins | No | No | No | No | **Yes** |
+| Type Safe | No | No | No | No | **Yes** |
+| Memory Safe | No | No | No | No | **Yes** |
 
 ---
 
 ## Contributing
 
-We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+We welcome contributions! Ember is designed to be easy to understand and extend.
 
 ```bash
-# Clone the repository
-git clone https://github.com/ember/ember
-cd ember
-
-# Quick start (builds and configures everything)
-./quickstart.sh
-
-# Or manual build
-cargo build --workspace
-cargo test --workspace
-
-# Run linter
-cargo clippy --workspace
-
-# Format code
-cargo fmt --all
+git clone https://github.com/niklasmarderx/Ember
+cd Ember
+./quickstart.sh  # Builds everything, sets up config
 ```
 
-### Development Requirements
-
-- Rust 1.75+ (install via [rustup.rs](https://rustup.rs))
-- Optional: Ollama for local model testing
-- Optional: API keys for cloud provider testing
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ---
 
@@ -481,8 +274,12 @@ MIT License - see [LICENSE-MIT](LICENSE-MIT)
 
 ---
 
-<p align="center">
-<strong>Small spark, big fire.</strong>
-<br>
-Built with Rust. Built for speed. Built for developers.
-</p>
+<div align="center">
+
+**Small spark, big fire.**
+
+Built with Rust. Built for speed. Built for developers who ship.
+
+[Get Started](#-quick-start-30-seconds) | [Star on GitHub](https://github.com/niklasmarderx/Ember)
+
+</div>
