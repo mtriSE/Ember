@@ -1,0 +1,70 @@
+[package]
+name = "ember-cli"
+version = "0.1.0"
+edition = "2021"
+description = "Command-line interface for Ember AI agent"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/ember-ai/ember"
+keywords = ["ai", "agent", "cli", "assistant"]
+categories = ["command-line-utilities"]
+
+[[bin]]
+name = "ember"
+path = "src/main.rs"
+
+[dependencies]
+# Workspace crates
+ember-core = { path = "../ember-core" }
+ember-llm = { path = "../ember-llm", features = ["openai", "ollama"] }
+ember-tools = { path = "../ember-tools", features = ["shell", "filesystem", "web"] }
+ember-web = { path = "../ember-web" }
+
+# Async runtime
+tokio = { workspace = true, features = ["full", "signal"] }
+
+# CLI parsing
+clap = { version = "4.5", features = ["derive", "env", "color"] }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Error handling
+anyhow = { workspace = true }
+
+# Logging
+tracing = { workspace = true }
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+# Terminal UI
+crossterm = "0.27"
+ratatui = { version = "0.26", optional = true }
+
+# Colors and styling
+colored = "2.1"
+
+# Configuration
+toml = "0.8"
+dirs = "5.0"
+
+# Streaming output
+futures = "0.3"
+tokio-stream = "0.1"
+
+# Text utilities
+textwrap = "0.16"
+
+# HTTP client
+reqwest = { workspace = true }
+
+# Web server (for serve command)
+axum = { workspace = true }
+
+[features]
+default = ["tui"]
+tui = ["dep:ratatui"]
+
+[dev-dependencies]
+assert_cmd = "2.0"
+predicates = "3.1"
+tempfile = "3.10"

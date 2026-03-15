@@ -1,0 +1,45 @@
+[package]
+name = "ember-browser"
+version = "0.1.0"
+edition = "2021"
+description = "Browser automation tool for Ember AI agent using Chrome DevTools Protocol"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/ember-ai/ember"
+keywords = ["browser", "automation", "cdp", "headless", "chrome"]
+categories = ["development-tools", "web-programming"]
+
+[dependencies]
+# CDP/Browser control
+chromiumoxide = { version = "0.7", features = ["tokio-runtime"], default-features = false }
+futures = "0.3"
+
+# Async runtime
+tokio = { version = "1", features = ["sync", "time"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Error handling
+thiserror = "2"
+anyhow = "1"
+
+# Logging
+tracing = "0.1"
+
+# Async trait
+async-trait = "0.1"
+
+# Image handling (for screenshots)
+base64 = "0.22"
+
+# Ember integration
+ember-tools = { path = "../ember-tools" }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["full", "test-util"] }
+
+[features]
+default = []
+# Enable fetcher feature for downloading browser
+fetcher = ["chromiumoxide/fetcher"]

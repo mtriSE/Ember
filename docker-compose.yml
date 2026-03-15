@@ -1,0 +1,100 @@
+# Ember Docker Compose Configuration
+# 
+# Usage:
+#   docker compose up -d          # Start Ember with Ollama
+#   docker compose logs -f ember  # View logs
+#   docker compose exec ember ember chat "Hello"  # Run chat
+#
+# This setup includes:
+# - Ember CLI container
+# - Ollama for local LLM inference
+# - Optional: ChromaDB for vector storage
+
+version: '3.8'
+
+services:
+  # Ollama - Local LLM Server
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ember-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # Ollama Model Puller - Downloads default model on first run
+  ollama-pull:
+    image: ollama/ollama:latest
+    container_name: ember-ollama-pull
+    depends_on:
+      ollama:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "Pulling llama3.2 model..."
+        ollama pull llama3.2
+        echo "Model ready!"
+    environment:
+      - OLLAMA_HOST=ollama:11434
+    restart: "no"
+
+  # Ember CLI
+  ember:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ember-cli
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      - EMBER_PROVIDER=ollama
+      - OLLAMA_HOST=http://ollama:11434
+    volumes:
+      - ember_config:/home/ember/.config/ember
+      - ember_data:/home/ember/.local/share/ember
+      # Mount current directory for file operations
+      - ./workspace:/home/ember/workspace:rw
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    # Override entrypoint for interactive mode
+    entrypoint: ["ember"]
+    command: ["chat"]
+
+  # ChromaDB - Vector Database (Optional)
+  # Uncomment to enable persistent vector storage
+  # chroma:
+  #   image: chromadb/chroma:latest
+  #   container_name: ember-chroma
+  #   ports:
+  #     - "8000:8000"
+  #   volumes:
+  #     - chroma_data:/chroma/chroma
+  #   environment:
+  #     - ANONYMIZED_TELEMETRY=false
+  #   restart: unless-stopped
+
+volumes:
+  ollama_data:
+    name: ember-ollama-data
+  ember_config:
+    name: ember-config
+  ember_data:
+    name: ember-data
+  # chroma_data:
+  #   name: ember-chroma-data
+
+networks:
+  default:
+    name: ember-network

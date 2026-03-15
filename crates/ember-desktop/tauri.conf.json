@@ -1,0 +1,66 @@
+{
+  "$schema": "https://schema.tauri.app/config/2.0.0",
+  "productName": "Ember AI",
+  "version": "0.1.0",
+  "identifier": "dev.ember.desktop",
+  "build": {
+    "frontendDist": "../ember-web/static",
+    "devUrl": "http://localhost:5173",
+    "beforeDevCommand": "cd ../ember-web/frontend && npm run dev",
+    "beforeBuildCommand": "cd ../ember-web/frontend && npm run build"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "title": "Ember AI",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 800,
+        "minHeight": 600,
+        "center": true,
+        "resizable": true,
+        "fullscreen": false,
+        "decorations": true,
+        "transparent": false
+      }
+    ],
+    "trayIcon": {
+      "iconPath": "icons/icon.png",
+      "iconAsTemplate": true
+    },
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "macOS": {
+      "minimumSystemVersion": "10.15"
+    },
+    "windows": {
+      "wix": null
+    },
+    "linux": {
+      "deb": {
+        "depends": []
+      }
+    }
+  },
+  "plugins": {
+    "shell": {
+      "open": true
+    },
+    "global-shortcut": {
+      "all": true
+    }
+  }
+}

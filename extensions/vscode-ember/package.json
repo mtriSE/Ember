@@ -1,0 +1,116 @@
+{
+  "name": "ember-ai",
+  "displayName": "Ember AI",
+  "description": "AI coding assistant powered by Ember",
+  "version": "0.1.0",
+  "publisher": "ember",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Machine Learning",
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "ember.chat",
+        "title": "Ember: Open Chat"
+      },
+      {
+        "command": "ember.explain",
+        "title": "Ember: Explain Selection"
+      },
+      {
+        "command": "ember.improve",
+        "title": "Ember: Improve Selection"
+      },
+      {
+        "command": "ember.generateTests",
+        "title": "Ember: Generate Tests"
+      }
+    ],
+    "configuration": {
+      "title": "Ember AI",
+      "properties": {
+        "ember.serverUrl": {
+          "type": "string",
+          "default": "http://localhost:3000",
+          "description": "URL of the Ember server"
+        },
+        "ember.model": {
+          "type": "string",
+          "default": "llama3.2",
+          "description": "Default model to use"
+        },
+        "ember.autoStart": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically start Ember server"
+        }
+      }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "ember-sidebar",
+          "title": "Ember AI",
+          "icon": "resources/ember.svg"
+        }
+      ]
+    },
+    "views": {
+      "ember-sidebar": [
+        {
+          "type": "webview",
+          "id": "ember.chatView",
+          "name": "Chat"
+        }
+      ]
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "command": "ember.explain",
+          "when": "editorHasSelection",
+          "group": "ember"
+        },
+        {
+          "command": "ember.improve",
+          "when": "editorHasSelection",
+          "group": "ember"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "ember.chat",
+        "key": "ctrl+shift+e",
+        "mac": "cmd+shift+e"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "eslint": "^8.54.0",
+    "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "eventsource": "^2.0.2"
+  }
+}

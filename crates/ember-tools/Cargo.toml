@@ -1,0 +1,58 @@
+[package]
+name = "ember-tools"
+version = "0.1.0"
+edition = "2021"
+description = "Built-in tools for Ember AI agents"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/ember-ai/ember"
+keywords = ["ai", "agent", "tools", "shell", "filesystem"]
+categories = ["asynchronous", "filesystem"]
+
+[dependencies]
+# Internal crates
+ember-llm = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Logging
+tracing = { workspace = true }
+
+# Async runtime
+tokio = { workspace = true, features = ["process", "fs", "io-util"] }
+
+# Async trait support
+async-trait = { workspace = true }
+
+# HTTP client for web tools
+reqwest = { version = "0.12", features = ["json"], optional = true }
+
+# Path handling
+dirs = "5.0"
+shellexpand = "3.1"
+
+# Glob patterns
+glob = "0.3"
+
+# JSON Schema for tool definitions
+schemars = "0.8"
+
+# Regex for shell security patterns
+regex = { workspace = true }
+
+[features]
+default = ["shell", "filesystem", "web", "git", "code-execution"]
+shell = []
+filesystem = []
+web = ["reqwest"]
+git = []
+code-execution = ["tokio/io-util"]
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
+tempfile = "3.10"

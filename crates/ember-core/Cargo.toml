@@ -1,0 +1,54 @@
+[package]
+name = "ember-core"
+version = "0.1.0"
+edition = "2021"
+description = "Core agent runtime for Ember AI framework"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/ember-ai/ember"
+keywords = ["ai", "agent", "llm", "assistant"]
+categories = ["asynchronous", "api-bindings"]
+
+[dependencies]
+# Workspace dependencies
+ember-llm = { path = "../ember-llm" }
+ember-tools = { path = "../ember-tools", optional = true }
+ember-storage = { path = "../ember-storage", optional = true }
+
+# Async runtime
+tokio = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# Error handling
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+
+# Logging
+tracing = { workspace = true }
+
+# Async trait support
+async-trait = { workspace = true }
+
+# Streaming
+futures = "0.3"
+tokio-stream = "0.1"
+
+# UUID for conversation IDs
+uuid = { version = "1.0", features = ["v4", "serde"] }
+
+# Regex for privacy PII detection
+regex = "1.10"
+
+# Time handling
+chrono = { version = "0.4", features = ["serde"] }
+humantime = "2.1"
+
+[features]
+default = ["tools", "storage"]
+tools = ["dep:ember-tools"]
+storage = ["dep:ember-storage"]
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
