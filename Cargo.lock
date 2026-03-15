@@ -1191,7 +1191,7 @@ checksum = "edd0f118536f44f5ccd48bcb8b111bdc3de888b58c74639dfb034a357d0f206d"
 
 [[package]]
 name = "ember-browser"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -1208,7 +1208,7 @@ dependencies = [
 
 [[package]]
 name = "ember-cli"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "anyhow",
  "assert_cmd",
@@ -1238,7 +1238,7 @@ dependencies = [
 
 [[package]]
 name = "ember-core"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -1260,7 +1260,7 @@ dependencies = [
 
 [[package]]
 name = "ember-llm"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "async-stream",
  "async-trait",
@@ -1282,7 +1282,7 @@ dependencies = [
 
 [[package]]
 name = "ember-mcp"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -1300,7 +1300,7 @@ dependencies = [
 
 [[package]]
 name = "ember-plugins"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "anyhow",
  "chrono",
@@ -1321,7 +1321,7 @@ dependencies = [
 
 [[package]]
 name = "ember-storage"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "async-trait",
  "chrono",
@@ -1339,7 +1339,7 @@ dependencies = [
 
 [[package]]
 name = "ember-tools"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -1360,7 +1360,7 @@ dependencies = [
 
 [[package]]
 name = "ember-web"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "anyhow",
  "askama",
@@ -1371,7 +1371,9 @@ dependencies = [
  "ember-llm",
  "futures-util",
  "http",
+ "mime_guess",
  "reqwest",
+ "rust-embed",
  "serde",
  "serde_json",
  "thiserror 1.0.69",
@@ -3156,6 +3158,40 @@ dependencies = [
  "hashlink",
  "libsqlite3-sys",
  "smallvec",
+]
+
+[[package]]
+name = "rust-embed"
+version = "8.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "04113cb9355a377d83f06ef1f0a45b8ab8cd7d8b1288160717d66df5c7988d27"
+dependencies = [
+ "rust-embed-impl",
+ "rust-embed-utils",
+ "walkdir",
+]
+
+[[package]]
+name = "rust-embed-impl"
+version = "8.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "da0902e4c7c8e997159ab384e6d0fc91c221375f6894346ae107f47dd0f3ccaa"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "rust-embed-utils",
+ "syn",
+ "walkdir",
+]
+
+[[package]]
+name = "rust-embed-utils"
+version = "8.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5bcdef0be6fe7f6fa333b1073c949729274b05f123a0ad7efcb8efd878e5c3b1"
+dependencies = [
+ "sha2",
+ "walkdir",
 ]
 
 [[package]]

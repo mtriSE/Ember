@@ -1,6 +1,6 @@
 [package]
 name = "ember-tools"
-version = "0.1.0"
+version = "1.0.0"
 edition = "2021"
 description = "Built-in tools for Ember AI agents"
 license = "MIT OR Apache-2.0"
