@@ -195,22 +195,26 @@ fn bench_memory(c: &mut Criterion) {
 
     // Benchmark memory summary generation
     for size in [10, 50, 100].iter() {
-        group.bench_with_input(BenchmarkId::new("generate_summary", size), size, |b, &size| {
-            let messages: Vec<String> = (0..size)
-                .map(|i| format!("Message {} with some content", i))
-                .collect();
+        group.bench_with_input(
+            BenchmarkId::new("generate_summary", size),
+            size,
+            |b, &size| {
+                let messages: Vec<String> = (0..size)
+                    .map(|i| format!("Message {} with some content", i))
+                    .collect();
 
-            b.iter(|| {
-                // Simulate summary generation by concatenating and truncating
-                let summary: String = messages
-                    .iter()
-                    .take(5)
-                    .map(|s| s.as_str())
-                    .collect::<Vec<_>>()
-                    .join(" | ");
-                black_box(summary)
-            })
-        });
+                b.iter(|| {
+                    // Simulate summary generation by concatenating and truncating
+                    let summary: String = messages
+                        .iter()
+                        .take(5)
+                        .map(|s| s.as_str())
+                        .collect::<Vec<_>>()
+                        .join(" | ");
+                    black_box(summary)
+                })
+            },
+        );
     }
 
     group.finish();

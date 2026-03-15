@@ -141,8 +141,8 @@ fn bench_parameter_parsing(c: &mut Criterion) {
         b.iter(|| {
             // Simulate basic validation
             let params = black_box(&params);
-            let is_valid = params.is_object()
-                && params.get("name").map(|v| v.is_string()).unwrap_or(false);
+            let is_valid =
+                params.is_object() && params.get("name").map(|v| v.is_string()).unwrap_or(false);
             black_box(is_valid)
         })
     });

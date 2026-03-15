@@ -7,7 +7,7 @@
 //! cargo bench -p ember-benchmarks --bench full_suite
 //! ```
 
-use criterion::{black_box, criterion_group, criterion_main, Criterion, BenchmarkId, Throughput};
+use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion, Throughput};
 use std::collections::HashMap;
 use std::time::Duration;
 
@@ -18,7 +18,7 @@ use std::time::Duration;
 fn full_core_benchmarks(c: &mut Criterion) {
     let mut group = c.benchmark_group("full_suite/core");
     group.measurement_time(Duration::from_secs(3));
-    
+
     // Config parsing
     group.bench_function("config_json_parse", |b| {
         let json = r#"{"model":"gpt-4","temperature":0.7,"max_tokens":1000}"#;
@@ -26,7 +26,7 @@ fn full_core_benchmarks(c: &mut Criterion) {
             let _: serde_json::Value = serde_json::from_str(black_box(json)).unwrap();
         });
     });
-    
+
     // Message creation
     group.bench_function("message_creation", |b| {
         b.iter(|| {
@@ -37,7 +37,7 @@ fn full_core_benchmarks(c: &mut Criterion) {
             })
         });
     });
-    
+
     // Conversation serialization
     for size in [10, 100, 500] {
         group.throughput(Throughput::Elements(size as u64));
@@ -46,16 +46,18 @@ fn full_core_benchmarks(c: &mut Criterion) {
             &size,
             |b, &size| {
                 let messages: Vec<serde_json::Value> = (0..size)
-                    .map(|i| serde_json::json!({
-                        "role": if i % 2 == 0 { "user" } else { "assistant" },
-                        "content": format!("Message {}", i)
-                    }))
+                    .map(|i| {
+                        serde_json::json!({
+                            "role": if i % 2 == 0 { "user" } else { "assistant" },
+                            "content": format!("Message {}", i)
+                        })
+                    })
                     .collect();
                 b.iter(|| serde_json::to_string(black_box(&messages)).unwrap());
             },
         );
     }
-    
+
     // Context operations
     group.bench_function("context_create", |b| {
         b.iter(|| {
@@ -67,7 +69,7 @@ fn full_core_benchmarks(c: &mut Criterion) {
             ctx
         });
     });
-    
+
     // Token counting approximation
     for size in [100, 1000, 5000] {
         let text: String = "word ".repeat(size);
@@ -84,7 +86,7 @@ fn full_core_benchmarks(c: &mut Criterion) {
             },
         );
     }
-    
+
     group.finish();
 }
 
@@ -95,7 +97,7 @@ fn full_core_benchmarks(c: &mut Criterion) {
 fn full_storage_benchmarks(c: &mut Criterion) {
     let mut group = c.benchmark_group("full_suite/storage");
     group.measurement_time(Duration::from_secs(3));
-    
+
     // Memory store operations
     group.bench_function("memory_store_insert_100", |b| {
         b.iter(|| {
@@ -106,7 +108,7 @@ fn full_storage_benchmarks(c: &mut Criterion) {
             store
         });
     });
-    
+
     group.bench_function("memory_store_get", |b| {
         let mut store: HashMap<String, String> = HashMap::new();
         for i in 0..1000 {
@@ -114,7 +116,7 @@ fn full_storage_benchmarks(c: &mut Criterion) {
         }
         b.iter(|| store.get(black_box("key_500")).cloned());
     });
-    
+
     // Vector operations
     for dim in [128, 384, 768, 1536] {
         group.bench_with_input(
@@ -124,8 +126,11 @@ fn full_storage_benchmarks(c: &mut Criterion) {
                 let v1: Vec<f32> = (0..dim).map(|i| (i as f32).sin()).collect();
                 let v2: Vec<f32> = (0..dim).map(|i| (i as f32).cos()).collect();
                 b.iter(|| {
-                    let dot: f32 = black_box(&v1).iter().zip(black_box(&v2).iter())
-                        .map(|(a, b)| a * b).sum();
+                    let dot: f32 = black_box(&v1)
+                        .iter()
+                        .zip(black_box(&v2).iter())
+                        .map(|(a, b)| a * b)
+                        .sum();
                     let norm1: f32 = v1.iter().map(|x| x * x).sum::<f32>().sqrt();
                     let norm2: f32 = v2.iter().map(|x| x * x).sum::<f32>().sqrt();
                     dot / (norm1 * norm2)
@@ -133,11 +138,11 @@ fn full_storage_benchmarks(c: &mut Criterion) {
             },
         );
     }
-    
+
     // Text chunking
     let long_text = "This is a sentence. ".repeat(500);
     group.throughput(Throughput::Bytes(long_text.len() as u64));
-    
+
     group.bench_function("text_chunk_fixed", |b| {
         b.iter(|| {
             black_box(&long_text)
@@ -147,7 +152,7 @@ fn full_storage_benchmarks(c: &mut Criterion) {
                 .collect::<Vec<_>>()
         });
     });
-    
+
     group.bench_function("text_chunk_sentence", |b| {
         b.iter(|| {
             black_box(&long_text)
@@ -156,7 +161,7 @@ fn full_storage_benchmarks(c: &mut Criterion) {
                 .collect::<Vec<_>>()
         });
     });
-    
+
     group.finish();
 }
 
@@ -167,7 +172,7 @@ fn full_storage_benchmarks(c: &mut Criterion) {
 fn full_tools_benchmarks(c: &mut Criterion) {
     let mut group = c.benchmark_group("full_suite/tools");
     group.measurement_time(Duration::from_secs(3));
-    
+
     // Tool registry
     group.bench_function("registry_insert_50", |b| {
         b.iter(|| {
@@ -179,13 +184,13 @@ fn full_tools_benchmarks(c: &mut Criterion) {
                         "name": format!("tool_{}", i),
                         "description": "A test tool",
                         "parameters": {}
-                    })
+                    }),
                 );
             }
             registry
         });
     });
-    
+
     group.bench_function("registry_lookup", |b| {
         let mut registry: HashMap<String, serde_json::Value> = HashMap::new();
         for i in 0..100 {
@@ -194,12 +199,12 @@ fn full_tools_benchmarks(c: &mut Criterion) {
                 serde_json::json!({
                     "name": format!("tool_{}", i),
                     "description": "A test tool"
-                })
+                }),
             );
         }
         b.iter(|| registry.get(black_box("tool_50")).cloned());
     });
-    
+
     // Parameter parsing
     group.bench_function("params_parse_complex", |b| {
         let params = r#"{
@@ -213,7 +218,7 @@ fn full_tools_benchmarks(c: &mut Criterion) {
             let _: serde_json::Value = serde_json::from_str(black_box(params)).unwrap();
         });
     });
-    
+
     // Tool call creation
     group.bench_function("tool_call_create", |b| {
         b.iter(|| {
@@ -225,7 +230,7 @@ fn full_tools_benchmarks(c: &mut Criterion) {
             })
         });
     });
-    
+
     // Path operations
     group.bench_function("path_join", |b| {
         b.iter(|| {
@@ -235,7 +240,7 @@ fn full_tools_benchmarks(c: &mut Criterion) {
                 .join("file.txt")
         });
     });
-    
+
     // HTTP URL parsing
     group.bench_function("url_parse", |b| {
         let url = "https://api.example.com/v1/chat?model=gpt-4&stream=true";
@@ -244,7 +249,7 @@ fn full_tools_benchmarks(c: &mut Criterion) {
             parts
         });
     });
-    
+
     // JSON response handling
     group.bench_function("json_response_parse", |b| {
         let response = r#"{
@@ -263,7 +268,7 @@ fn full_tools_benchmarks(c: &mut Criterion) {
             let _: serde_json::Value = serde_json::from_str(black_box(response)).unwrap();
         });
     });
-    
+
     group.finish();
 }
 
@@ -274,7 +279,7 @@ fn full_tools_benchmarks(c: &mut Criterion) {
 fn full_workflow_benchmarks(c: &mut Criterion) {
     let mut group = c.benchmark_group("full_suite/workflow");
     group.measurement_time(Duration::from_secs(5));
-    
+
     // Simulate complete chat request processing
     group.bench_function("chat_request_process", |b| {
         b.iter(|| {
@@ -287,19 +292,18 @@ fn full_workflow_benchmarks(c: &mut Criterion) {
                 ],
                 "temperature": 0.7
             });
-            let _parsed: serde_json::Value = serde_json::from_str(
-                &serde_json::to_string(black_box(&request)).unwrap()
-            ).unwrap();
-            
+            let _parsed: serde_json::Value =
+                serde_json::from_str(&serde_json::to_string(black_box(&request)).unwrap()).unwrap();
+
             // 2. Validate context
             let mut context = HashMap::new();
             context.insert("model", "gpt-4");
             context.insert("temperature", "0.7");
-            
+
             // 3. Token estimation
             let content = "You are helpful Hello";
             let _tokens = content.split_whitespace().count() * 4 / 3;
-            
+
             // 4. Build response
             serde_json::json!({
                 "id": "resp_123",
@@ -309,7 +313,7 @@ fn full_workflow_benchmarks(c: &mut Criterion) {
             })
         });
     });
-    
+
     // Simulate tool execution pipeline
     group.bench_function("tool_execution_pipeline", |b| {
         b.iter(|| {
@@ -318,16 +322,14 @@ fn full_workflow_benchmarks(c: &mut Criterion) {
                 "tool": "shell_execute",
                 "parameters": {"command": "echo test"}
             });
-            let _: serde_json::Value = serde_json::from_str(
-                &serde_json::to_string(black_box(&call)).unwrap()
-            ).unwrap();
-            
+            let _: serde_json::Value =
+                serde_json::from_str(&serde_json::to_string(black_box(&call)).unwrap()).unwrap();
+
             // 2. Validate parameters
-            let params: HashMap<String, String> = HashMap::from([
-                ("command".to_string(), "echo test".to_string())
-            ]);
+            let params: HashMap<String, String> =
+                HashMap::from([("command".to_string(), "echo test".to_string())]);
             let _valid = params.contains_key("command");
-            
+
             // 3. Build result
             serde_json::json!({
                 "tool": "shell_execute",
@@ -337,45 +339,44 @@ fn full_workflow_benchmarks(c: &mut Criterion) {
             })
         });
     });
-    
+
     // Simulate RAG retrieval
     group.bench_function("rag_retrieval_simulate", |b| {
         // Setup: Create document store
         let documents: Vec<(String, Vec<f32>)> = (0..100)
             .map(|i| {
-                let embedding: Vec<f32> = (0..384)
-                    .map(|j| ((i * j) as f32).sin())
-                    .collect();
+                let embedding: Vec<f32> = (0..384).map(|j| ((i * j) as f32).sin()).collect();
                 (format!("Document {}", i), embedding)
             })
             .collect();
-        
-        let query_embedding: Vec<f32> = (0..384)
-            .map(|i| (i as f32 * 0.5).cos())
-            .collect();
-        
+
+        let query_embedding: Vec<f32> = (0..384).map(|i| (i as f32 * 0.5).cos()).collect();
+
         b.iter(|| {
             // Find top-5 similar documents
-            let mut scores: Vec<(usize, f32)> = documents.iter()
+            let mut scores: Vec<(usize, f32)> = documents
+                .iter()
                 .enumerate()
                 .map(|(idx, (_, emb))| {
-                    let dot: f32 = black_box(&query_embedding).iter()
+                    let dot: f32 = black_box(&query_embedding)
+                        .iter()
                         .zip(emb.iter())
                         .map(|(a, b)| a * b)
                         .sum();
                     (idx, dot)
                 })
                 .collect();
-            
+
             scores.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
             scores.truncate(5);
-            
-            scores.iter()
+
+            scores
+                .iter()
                 .map(|(idx, score)| (&documents[*idx].0, *score))
                 .collect::<Vec<_>>()
         });
     });
-    
+
     group.finish();
 }
 
@@ -386,24 +387,19 @@ fn full_workflow_benchmarks(c: &mut Criterion) {
 fn full_memory_benchmarks(c: &mut Criterion) {
     let mut group = c.benchmark_group("full_suite/memory");
     group.measurement_time(Duration::from_secs(3));
-    
+
     // String allocation patterns
     for size in [100, 1000, 10000] {
         group.throughput(Throughput::Elements(size as u64));
-        group.bench_with_input(
-            BenchmarkId::new("string_alloc", size),
-            &size,
-            |b, &size| {
-                b.iter(|| {
-                    let strings: Vec<String> = (0..size)
-                        .map(|i| format!("String number {}", i))
-                        .collect();
-                    black_box(strings)
-                });
-            },
-        );
+        group.bench_with_input(BenchmarkId::new("string_alloc", size), &size, |b, &size| {
+            b.iter(|| {
+                let strings: Vec<String> =
+                    (0..size).map(|i| format!("String number {}", i)).collect();
+                black_box(strings)
+            });
+        });
     }
-    
+
     // HashMap growth
     for size in [100, 1000, 5000] {
         group.throughput(Throughput::Elements(size as u64));
@@ -414,17 +410,14 @@ fn full_memory_benchmarks(c: &mut Criterion) {
                 b.iter(|| {
                     let mut map: HashMap<String, serde_json::Value> = HashMap::new();
                     for i in 0..*size {
-                        map.insert(
-                            format!("key_{}", i),
-                            serde_json::json!({"value": i})
-                        );
+                        map.insert(format!("key_{}", i), serde_json::json!({"value": i}));
                     }
                     black_box(map)
                 });
             },
         );
     }
-    
+
     // Vec capacity management
     group.bench_function("vec_with_capacity", |b| {
         b.iter(|| {
@@ -435,7 +428,7 @@ fn full_memory_benchmarks(c: &mut Criterion) {
             vec
         });
     });
-    
+
     group.bench_function("vec_without_capacity", |b| {
         b.iter(|| {
             let mut vec: Vec<serde_json::Value> = Vec::new();
@@ -445,7 +438,7 @@ fn full_memory_benchmarks(c: &mut Criterion) {
             vec
         });
     });
-    
+
     group.finish();
 }
 
@@ -459,7 +452,7 @@ criterion_group!(
         .sample_size(50)
         .measurement_time(Duration::from_secs(5))
         .warm_up_time(Duration::from_secs(1));
-    targets = 
+    targets =
         full_core_benchmarks,
         full_storage_benchmarks,
         full_tools_benchmarks,

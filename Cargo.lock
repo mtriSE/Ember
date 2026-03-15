@@ -916,6 +916,7 @@ dependencies = [
  "ciborium",
  "clap",
  "criterion-plot",
+ "futures",
  "is-terminal",
  "itertools 0.10.5",
  "num-traits",
@@ -928,6 +929,7 @@ dependencies = [
  "serde_derive",
  "serde_json",
  "tinytemplate",
+ "tokio",
  "walkdir",
 ]
 
@@ -1194,6 +1196,26 @@ name = "embedded-io"
 version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "edd0f118536f44f5ccd48bcb8b111bdc3de888b58c74639dfb034a357d0f206d"
+
+[[package]]
+name = "ember-benchmarks"
+version = "1.1.0"
+dependencies = [
+ "async-trait",
+ "chrono",
+ "criterion",
+ "ember-core",
+ "ember-llm",
+ "ember-plugins",
+ "ember-storage",
+ "ember-tools",
+ "rand 0.8.5",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "tokio",
+ "toml",
+]
 
 [[package]]
 name = "ember-browser"

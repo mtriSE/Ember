@@ -22,7 +22,7 @@ impl BenchmarkResult {
     pub fn from_samples(name: impl Into<String>, samples: &[Duration]) -> Self {
         let name = name.into();
         let iterations = samples.len() as u64;
-        
+
         if samples.is_empty() {
             return Self {
                 name,
@@ -39,10 +39,10 @@ impl BenchmarkResult {
         let total_time: Duration = samples.iter().sum();
         let mean_nanos = total_time.as_nanos() / iterations as u128;
         let mean_time = Duration::from_nanos(mean_nanos as u64);
-        
+
         let min_time = *samples.iter().min().unwrap();
         let max_time = *samples.iter().max().unwrap();
-        
+
         // Calculate standard deviation
         let variance = samples
             .iter()
@@ -53,7 +53,7 @@ impl BenchmarkResult {
             .sum::<f64>()
             / iterations as f64;
         let std_dev = Duration::from_nanos(variance.sqrt() as u64);
-        
+
         Self {
             name,
             iterations,
@@ -192,7 +192,7 @@ pub fn random_string(len: usize) -> String {
 /// Generate random JSON document
 pub fn random_json(depth: usize, breadth: usize) -> serde_json::Value {
     use serde_json::json;
-    
+
     if depth == 0 {
         return json!(random_string(10));
     }
