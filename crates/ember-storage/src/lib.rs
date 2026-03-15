@@ -35,6 +35,7 @@
 pub mod embeddings;
 pub mod error;
 pub mod memory;
+pub mod rag;
 
 #[cfg(feature = "sqlite")]
 pub mod sqlite;
@@ -55,6 +56,10 @@ pub use memory::{
     DocId, Document, MemoryStats, SearchResult as VectorSearchResult, VectorMemory,
     VectorMemoryConfig,
 };
+pub use rag::{
+    Chunker, ChunkingStrategy, OpenAIEmbedder, RagConfig, RagPipeline, RagStats, RetrievedChunk,
+    RetrievedContext, TextChunk, VoyageEmbedder,
+};
 
 #[cfg(feature = "sqlite")]
 pub use sqlite::{ConversationRecord, MemoryRecord, MessageRecord, SqliteConfig, SqliteStorage};
@@ -69,6 +74,9 @@ pub mod prelude {
     pub use crate::embeddings::{cosine_similarity, Embedder, LocalEmbedder};
     pub use crate::error::{Result, StorageError};
     pub use crate::memory::{DocId, Document, VectorMemory, VectorMemoryConfig};
+    pub use crate::rag::{
+        Chunker, ChunkingStrategy, RagConfig, RagPipeline, RetrievedChunk, RetrievedContext,
+    };
 
     #[cfg(feature = "sqlite")]
     pub use crate::sqlite::{
