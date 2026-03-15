@@ -32,7 +32,7 @@ RUN apt-get update && apt-get install -y \
 RUN useradd -m -u 1000 ember
 
 # Copy binary from builder
-COPY --from=builder /app/target/release/ember-cli /usr/local/bin/ember
+COPY --from=builder /app/target/release/ember /usr/local/bin/ember
 
 # Set permissions
 RUN chmod +x /usr/local/bin/ember
