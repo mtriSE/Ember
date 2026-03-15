@@ -469,14 +469,6 @@ cargo fmt --all
 
 ---
 
-## Community
-
-- **Discord**: [discord.gg/ember](https://discord.gg/ember)
-- **Twitter**: [@ember_agent](https://twitter.com/ember_agent)
-- **GitHub Discussions**: [Discussions](https://github.com/ember/ember/discussions)
-
----
-
 ## License
 
 MIT License - see [LICENSE-MIT](LICENSE-MIT)
