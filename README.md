@@ -424,11 +424,17 @@ system_prompt = "You are Ember, a helpful AI assistant."
 - [x] Docker support
 - [x] Quick start script (`./quickstart.sh`)
 
-### v0.2 (Next)
-- [ ] WASM plugin system improvements
-- [ ] Multi-agent collaboration
-- [ ] Web UI dashboard
-- [ ] Custom tool SDK
+### v0.2 (Current)
+- [x] WASM plugin system improvements (marketplace, hot-reload)
+- [x] Multi-agent collaboration (ACP protocol, shared memory, task delegation)
+- [x] Web UI dashboard (React/TypeScript)
+- [x] Custom tool SDK (SimpleTool, AsyncTool, ParamExtractor)
+
+### v0.3 (Next)
+- [ ] Plugin marketplace hosting
+- [ ] Advanced RAG pipelines
+- [ ] Voice interface
+- [ ] Mobile companion app
 
 ### v1.0
 - [ ] Production-ready stability
