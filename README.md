@@ -1,18 +1,5 @@
 <div align="center">
 
-```
-                     
-                   ╱ ╲
-                  ╱   ╲
-                 ╱  ▲  ╲
-                ╱  ╱ ╲  ╲
-               ╱  ╱   ╲  ╲
-              ╱  ╱  ◆  ╲  ╲
-             ╱  ╱       ╲  ╲
-            ███████████████
-                EMBER
-```
-
 # Ember
 
 ### The AI Agent That Starts in 30 Seconds, Not 30 Minutes
@@ -24,12 +11,36 @@
 
 **One binary. Zero dependencies. Rust-powered. Privacy-first.**
 
-[Quick Start](#-quick-start-30-seconds) |
-[Why Ember](#-why-ember) |
-[Features](#-features) |
+[Quick Start](#quick-start-30-seconds) |
+[Why Ember](#why-ember) |
+[Features](#feature-highlights) |
 [Documentation](https://ember.dev/docs)
 
+---
+
+**Questions? Feedback? Enterprise inquiries?**  
+Contact: [niklas.marder@gmail.com](mailto:niklas.marder@gmail.com)
+
 </div>
+
+---
+
+## What Makes Ember Revolutionary
+
+> **"The first AI agent framework that respects your time, your memory, and your privacy."**
+
+| Traditional Agents | Ember |
+|---|---|
+| Minutes to install | **Seconds** |
+| Gigabytes of RAM | **Megabytes** |
+| Hundreds of dependencies | **Zero** |
+| Requires internet | **Works offline** |
+| Python runtime needed | **Single binary** |
+| "It worked on my machine" | **If it compiles, it runs** |
+
+**Ember is not an incremental improvement. It's a complete reimagining of what an AI agent should be.**
+
+We took everything developers hate about existing frameworks - the bloat, the slow starts, the dependency hell, the mandatory cloud connection - and eliminated it. What's left is pure, fast, reliable AI tooling.
 
 ---
 
@@ -280,6 +291,10 @@ MIT License - see [LICENSE-MIT](LICENSE-MIT)
 
 Built with Rust. Built for speed. Built for developers who ship.
 
-[Get Started](#-quick-start-30-seconds) | [Star on GitHub](https://github.com/niklasmarderx/Ember)
+[Get Started](#quick-start-30-seconds) | [Star on GitHub](https://github.com/niklasmarderx/Ember)
+
+---
+
+**Contact:** [niklas.marder@gmail.com](mailto:niklas.marder@gmail.com)
 
 </div>
