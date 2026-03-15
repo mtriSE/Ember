@@ -1,0 +1,80 @@
+{
+  "name": "weather",
+  "version": "1.2.0",
+  "description": "Get weather forecasts for any location using OpenWeatherMap API",
+  "author": {
+    "name": "Ember Community",
+    "email": "plugins@ember.dev",
+    "url": "https://ember.dev"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/ember-ai/plugin-weather",
+  "keywords": ["weather", "forecast", "temperature", "climate"],
+  "categories": ["utility", "productivity"],
+  "ember_version": ">=1.0.0",
+  "entry_point": "weather.wasm",
+  "permissions": [
+    "network:api.openweathermap.org"
+  ],
+  "config": {
+    "api_key": {
+      "type": "string",
+      "required": true,
+      "env_var": "OPENWEATHER_API_KEY",
+      "description": "OpenWeatherMap API key"
+    },
+    "units": {
+      "type": "string",
+      "default": "metric",
+      "enum": ["metric", "imperial", "kelvin"],
+      "description": "Temperature units"
+    },
+    "language": {
+      "type": "string",
+      "default": "en",
+      "description": "Language for weather descriptions"
+    }
+  },
+  "tools": [
+    {
+      "name": "get_weather",
+      "description": "Get current weather for a location",
+      "parameters": {
+        "location": {
+          "type": "string",
+          "required": true,
+          "description": "City name or coordinates (lat,lon)"
+        }
+      }
+    },
+    {
+      "name": "get_forecast",
+      "description": "Get weather forecast for the next 5 days",
+      "parameters": {
+        "location": {
+          "type": "string",
+          "required": true,
+          "description": "City name or coordinates (lat,lon)"
+        },
+        "days": {
+          "type": "integer",
+          "default": 5,
+          "min": 1,
+          "max": 5,
+          "description": "Number of days for forecast"
+        }
+      }
+    },
+    {
+      "name": "get_alerts",
+      "description": "Get weather alerts for a location",
+      "parameters": {
+        "location": {
+          "type": "string",
+          "required": true,
+          "description": "City name or coordinates (lat,lon)"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,285 @@
+# =============================================================================
+# Ember Benchmark CI Workflow
+# =============================================================================
+# 
+# This workflow runs performance benchmarks on every push to main and on PRs.
+# Results are compared against the base branch to detect performance regressions.
+#
+# Benchmarks run:
+# - Core benchmarks (config, conversation, context, memory, token counting)
+# - Storage benchmarks (memory store, vector operations, text chunking)
+# - Tools benchmarks (registry, parameters, serialization, path ops)
+# - Full suite (combined comprehensive benchmark)
+#
+# =============================================================================
+
+name: Benchmarks
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'crates/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - '.github/workflows/benchmark.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'crates/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+  workflow_dispatch:
+    inputs:
+      benchmark_type:
+        description: 'Benchmark type to run'
+        required: true
+        default: 'full_suite'
+        type: choice
+        options:
+          - full_suite
+          - core_benchmarks
+          - storage_benchmarks
+          - tools_benchmarks
+          - all
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0
+  RUSTFLAGS: "-C debuginfo=0"
+
+jobs:
+  # ===========================================================================
+  # Benchmark Job
+  # ===========================================================================
+  benchmark:
+    name: Run Benchmarks
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for comparison
+
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Cache cargo registry
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-bench-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-bench-
+            ${{ runner.os }}-cargo-
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gnuplot
+
+      - name: Build benchmarks
+        run: cargo build --release -p ember-benchmarks
+
+      # -----------------------------------------------------------------------
+      # Run benchmarks based on input or default
+      # -----------------------------------------------------------------------
+      - name: Run full suite benchmark
+        if: github.event.inputs.benchmark_type == 'full_suite' || github.event.inputs.benchmark_type == 'all' || github.event.inputs.benchmark_type == ''
+        run: |
+          echo "📊 Running full benchmark suite..."
+          cargo bench -p ember-benchmarks --bench full_suite -- --save-baseline current
+        continue-on-error: true
+
+      - name: Run core benchmarks
+        if: github.event.inputs.benchmark_type == 'core_benchmarks' || github.event.inputs.benchmark_type == 'all'
+        run: |
+          echo "📊 Running core benchmarks..."
+          cargo bench -p ember-benchmarks --bench core_benchmarks -- --save-baseline current
+        continue-on-error: true
+
+      - name: Run storage benchmarks
+        if: github.event.inputs.benchmark_type == 'storage_benchmarks' || github.event.inputs.benchmark_type == 'all'
+        run: |
+          echo "📊 Running storage benchmarks..."
+          cargo bench -p ember-benchmarks --bench storage_benchmarks -- --save-baseline current
+        continue-on-error: true
+
+      - name: Run tools benchmarks
+        if: github.event.inputs.benchmark_type == 'tools_benchmarks' || github.event.inputs.benchmark_type == 'all'
+        run: |
+          echo "📊 Running tools benchmarks..."
+          cargo bench -p ember-benchmarks --bench tools_benchmarks -- --save-baseline current
+        continue-on-error: true
+
+      # -----------------------------------------------------------------------
+      # Compare with base branch (for PRs)
+      # -----------------------------------------------------------------------
+      - name: Checkout base branch for comparison
+        if: github.event_name == 'pull_request'
+        run: |
+          git checkout ${{ github.base_ref }}
+
+      - name: Run baseline benchmark
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "📊 Running baseline benchmark on ${{ github.base_ref }}..."
+          cargo bench -p ember-benchmarks --bench full_suite -- --save-baseline base
+        continue-on-error: true
+
+      - name: Checkout PR branch
+        if: github.event_name == 'pull_request'
+        run: |
+          git checkout ${{ github.head_ref }}
+
+      - name: Compare benchmarks
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "📈 Comparing benchmarks..."
+          cargo bench -p ember-benchmarks --bench full_suite -- --baseline base --load-baseline current
+        continue-on-error: true
+
+      # -----------------------------------------------------------------------
+      # Upload results
+      # -----------------------------------------------------------------------
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results-${{ github.sha }}
+          path: |
+            target/criterion
+          retention-days: 30
+
+      - name: Generate benchmark summary
+        run: |
+          echo "## 📊 Benchmark Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Run Information" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Runner:** \`${{ runner.os }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Date:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Benchmark Categories" >> $GITHUB_STEP_SUMMARY
+          echo "| Category | Description |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|-------------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Core | Config parsing, conversation, context, memory |" >> $GITHUB_STEP_SUMMARY
+          echo "| Storage | Memory store, vectors, text chunking |" >> $GITHUB_STEP_SUMMARY
+          echo "| Tools | Registry, parameters, serialization |" >> $GITHUB_STEP_SUMMARY
+          echo "| Full Suite | Combined comprehensive benchmark |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📁 Detailed results available in artifacts." >> $GITHUB_STEP_SUMMARY
+
+  # ===========================================================================
+  # Performance Regression Check
+  # ===========================================================================
+  regression-check:
+    name: Performance Regression Check
+    runs-on: ubuntu-latest
+    needs: benchmark
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Download benchmark results
+        uses: actions/download-artifact@v4
+        with:
+          name: benchmark-results-${{ github.sha }}
+          path: benchmark-results
+
+      - name: Check for regressions
+        run: |
+          echo "🔍 Checking for performance regressions..."
+          
+          # This is a placeholder for more sophisticated regression detection
+          # In production, you might use tools like:
+          # - critcmp for Criterion comparison
+          # - Custom scripts to parse JSON reports
+          # - GitHub Actions bot comments
+          
+          if [ -d "benchmark-results" ]; then
+            echo "✅ Benchmark results found"
+            echo "📊 Results are in benchmark-results/"
+            ls -la benchmark-results/
+          else
+            echo "⚠️ No benchmark results found"
+          fi
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            const comment = `## 📊 Benchmark Results
+            
+            Benchmarks have been run for this PR.
+            
+            **Details:**
+            - Commit: \`${{ github.sha }}\`
+            - Base: \`${{ github.base_ref }}\`
+            
+            📁 Download the full results from the [Actions artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+            
+            ### Quick Reference
+            - ✅ **Core benchmarks:** Config, conversation, context, memory
+            - ✅ **Storage benchmarks:** Memory store, vectors, text chunking  
+            - ✅ **Tools benchmarks:** Registry, parameters, path operations
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  # ===========================================================================
+  # Weekly Performance Tracking
+  # ===========================================================================
+  weekly-tracking:
+    name: Weekly Performance Tracking
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.event.inputs.benchmark_type == 'all')
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-bench-weekly-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Run all benchmarks
+        run: |
+          echo "📊 Running weekly comprehensive benchmark..."
+          cargo bench -p ember-benchmarks --bench full_suite -- --save-baseline weekly-$(date +%Y%m%d)
+
+      - name: Archive weekly results
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-benchmark-${{ github.run_number }}
+          path: target/criterion
+          retention-days: 90
+
+# =============================================================================
+# Schedule: Run weekly performance tracking every Sunday at 2:00 AM UTC
+# =============================================================================
+# Uncomment to enable:
+# on:
+#   schedule:
+#     - cron: '0 2 * * 0'

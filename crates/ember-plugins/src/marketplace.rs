@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 use tokio::fs;
-use tracing::{debug, info, warn};
+use tracing::{info, warn};
 
 /// Plugin registry entry with metadata.
 #[derive(Debug, Clone, Serialize, Deserialize)]

@@ -165,32 +165,41 @@ impl Error {
         match self {
             Self::ApiKeyMissing { provider, env_var } => {
                 format!(
-                    "API key for {} not found.\n\n\
+                    "🔑 API key for {} not found.\n\n\
                     Set it via environment variable:\n  \
                     export {}=your-key-here\n\n\
                     Or add to ~/.ember/config.toml:\n  \
                     [llm.{}]\n  \
-                    api_key = \"your-key-here\"",
+                    api_key = \"your-key-here\"\n\n\
+                    📖 See: https://docs.ember.dev/providers/{}",
                     provider,
                     env_var,
+                    provider.to_lowercase(),
                     provider.to_lowercase()
                 )
             }
             Self::ProviderUnavailable { provider, message } => {
                 if provider == "ollama" {
                     format!(
-                        "Ollama is not running.\n\n\
+                        "🔌 Ollama is not running.\n\n\
                         Start Ollama with:\n  \
                         ollama serve\n\n\
                         Or install it from: https://ollama.com\n\n\
+                        📖 See: https://docs.ember.dev/providers/ollama\n\n\
                         Original error: {}",
                         message
                     )
                 } else {
                     format!(
-                        "{} is not available: {}\n\n\
-                        Please check your network connection and try again.",
-                        provider, message
+                        "🔌 {} is not available: {}\n\n\
+                        Troubleshooting steps:\n\
+                        1. Check your internet connection\n\
+                        2. Verify the provider's status page\n\
+                        3. Try again in a few moments\n\n\
+                        📖 See: https://docs.ember.dev/providers/{}",
+                        provider,
+                        message,
+                        provider.to_lowercase()
                     )
                 }
             }
@@ -199,15 +208,232 @@ impl Error {
                 retry_after,
             } => {
                 let retry_msg = retry_after
-                    .map(|s| format!(" Try again in {} seconds.", s))
+                    .map(|s| format!("\n\n⏱️  Wait {} seconds before retrying.", s))
                     .unwrap_or_default();
                 format!(
-                    "Rate limit exceeded for {}.{}\n\n\
-                    Consider using a different provider or waiting before retrying.",
+                    "⚠️  Rate limit exceeded for {}.{}\n\n\
+                    Options:\n\
+                    1. Wait a moment and try again\n\
+                    2. Use a different provider: ember chat --provider ollama\n\
+                    3. Upgrade your API plan for higher limits\n\n\
+                    💡 Tip: Use --provider to switch providers temporarily.",
                     provider, retry_msg
                 )
             }
-            _ => self.to_string(),
+            Self::ModelNotFound { model, provider } => {
+                format!(
+                    "❌ Model '{}' not found on {}.\n\n\
+                    Suggestions:\n\
+                    1. Check the model name spelling\n\
+                    2. List available models: ember models --provider {}\n\
+                    3. Try a default model\n\n\
+                    Popular models for {}:\n{}",
+                    model,
+                    provider,
+                    provider.to_lowercase(),
+                    provider,
+                    Self::suggest_models(provider)
+                )
+            }
+            Self::ContextLengthExceeded { message } => {
+                format!(
+                    "📏 Context length exceeded: {}\n\n\
+                    Solutions:\n\
+                    1. Shorten your message or conversation\n\
+                    2. Clear conversation history: /clear\n\
+                    3. Use a model with larger context window\n\n\
+                    💡 Tip: GPT-4 Turbo supports 128K tokens, Claude 3 supports 200K tokens.",
+                    message
+                )
+            }
+            Self::HttpError(e) => {
+                let hint = if e.is_timeout() {
+                    "The request timed out. The server might be overloaded."
+                } else if e.is_connect() {
+                    "Could not connect to the server. Check your internet connection."
+                } else if e.is_request() {
+                    "There was a problem with the request."
+                } else {
+                    "A network error occurred."
+                };
+                format!(
+                    "🌐 Network error: {}\n\n\
+                    💡 {}\n\n\
+                    Suggestions:\n\
+                    1. Check your internet connection\n\
+                    2. Try again in a few moments\n\
+                    3. Use a local model: ember chat --provider ollama",
+                    e, hint
+                )
+            }
+            Self::ApiError {
+                provider,
+                status,
+                message,
+            } => {
+                let status_hint = match *status {
+                    400 => "Bad Request - The request was malformed.",
+                    401 => "Unauthorized - Check your API key.",
+                    403 => "Forbidden - You don't have access to this resource.",
+                    404 => "Not Found - The endpoint or model doesn't exist.",
+                    422 => "Unprocessable - The request parameters are invalid.",
+                    429 => "Too Many Requests - Rate limit exceeded.",
+                    500..=599 => "Server Error - The provider is having issues.",
+                    _ => "An error occurred with the API request.",
+                };
+                format!(
+                    "⚠️  API error from {} (HTTP {}):\n{}\n\n\
+                    💡 {}\n\n\
+                    If this persists, try:\n\
+                    1. Using a different provider\n\
+                    2. Checking the provider's status page\n\
+                    3. Updating your API key",
+                    provider, status, message, status_hint
+                )
+            }
+            Self::Timeout { seconds } => {
+                format!(
+                    "⏱️  Request timed out after {} seconds.\n\n\
+                    The server is taking too long to respond.\n\n\
+                    Suggestions:\n\
+                    1. Try a simpler request\n\
+                    2. Use a faster provider like Groq\n\
+                    3. Check the provider's status page",
+                    seconds
+                )
+            }
+            Self::InvalidRequest(msg) => {
+                format!(
+                    "❌ Invalid request: {}\n\n\
+                    Please check your input and try again.\n\n\
+                    💡 Tip: Use --help to see available options.",
+                    msg
+                )
+            }
+            Self::ConfigError(msg) => {
+                format!(
+                    "⚙️  Configuration error: {}\n\n\
+                    Run 'ember config show' to see your current configuration.\n\
+                    Run 'ember config init' to create a new configuration file.",
+                    msg
+                )
+            }
+            Self::StreamError(msg) => {
+                format!(
+                    "📡 Streaming error: {}\n\n\
+                    Try using --no-stream to disable streaming.",
+                    msg
+                )
+            }
+            Self::ToolError(msg) => {
+                format!(
+                    "🔧 Tool error: {}\n\n\
+                    The tool execution failed. Check the tool configuration.",
+                    msg
+                )
+            }
+            Self::ParseError(e) => {
+                format!(
+                    "📄 Failed to parse response: {}\n\n\
+                    The API returned an unexpected format.\n\
+                    This might be a temporary issue. Please try again.",
+                    e
+                )
+            }
+        }
+    }
+
+    /// Suggest popular models for a provider
+    fn suggest_models(provider: &str) -> String {
+        match provider.to_lowercase().as_str() {
+            "openai" => "  • gpt-4o (recommended)\n  • gpt-4-turbo\n  • gpt-3.5-turbo".to_string(),
+            "anthropic" => "  • claude-3-5-sonnet-20241022 (recommended)\n  • claude-3-opus-20240229\n  • claude-3-haiku-20240307".to_string(),
+            "ollama" => "  • llama3.2 (recommended)\n  • mistral\n  • codellama".to_string(),
+            "groq" => "  • llama-3.3-70b-versatile (recommended)\n  • mixtral-8x7b-32768".to_string(),
+            "gemini" => "  • gemini-1.5-pro (recommended)\n  • gemini-1.5-flash".to_string(),
+            "deepseek" => "  • deepseek-chat (recommended)\n  • deepseek-coder".to_string(),
+            "mistral" => "  • mistral-large-latest (recommended)\n  • mistral-medium".to_string(),
+            "openrouter" => "  • anthropic/claude-3.5-sonnet\n  • openai/gpt-4o\n  • google/gemini-pro".to_string(),
+            "xai" => "  • grok-beta (recommended)".to_string(),
+            _ => "  Check the provider documentation for available models.".to_string(),
+        }
+    }
+
+    /// Get recovery suggestions for the error
+    pub fn recovery_suggestions(&self) -> Vec<String> {
+        match self {
+            Self::ApiKeyMissing { .. } => vec![
+                "Set the API key via environment variable".to_string(),
+                "Add the API key to ~/.ember/config.toml".to_string(),
+                "Use a different provider that's already configured".to_string(),
+            ],
+            Self::ProviderUnavailable { provider, .. } => {
+                if provider == "ollama" {
+                    vec![
+                        "Start Ollama: ollama serve".to_string(),
+                        "Install Ollama from https://ollama.com".to_string(),
+                        "Use a cloud provider instead".to_string(),
+                    ]
+                } else {
+                    vec![
+                        "Check your internet connection".to_string(),
+                        "Try again in a few moments".to_string(),
+                        "Use a different provider".to_string(),
+                    ]
+                }
+            }
+            Self::RateLimitExceeded { retry_after, .. } => {
+                let mut suggestions = vec![];
+                if let Some(seconds) = retry_after {
+                    suggestions.push(format!("Wait {} seconds and try again", seconds));
+                }
+                suggestions.push("Use a different provider".to_string());
+                suggestions.push("Reduce request frequency".to_string());
+                suggestions.push("Upgrade your API plan".to_string());
+                suggestions
+            }
+            Self::ModelNotFound { .. } => vec![
+                "Check the model name spelling".to_string(),
+                "List available models with 'ember models'".to_string(),
+                "Use a default model for the provider".to_string(),
+            ],
+            Self::HttpError(_) => vec![
+                "Check your internet connection".to_string(),
+                "Try again in a few moments".to_string(),
+                "Use a local model with Ollama".to_string(),
+            ],
+            Self::Timeout { .. } => vec![
+                "Try a simpler request".to_string(),
+                "Use a faster provider".to_string(),
+                "Increase the timeout setting".to_string(),
+            ],
+            _ => vec![
+                "Try again".to_string(),
+                "Check the error message for details".to_string(),
+            ],
+        }
+    }
+
+    /// Check if this error might be transient
+    pub fn is_transient(&self) -> bool {
+        matches!(
+            self,
+            Self::HttpError(_)
+                | Self::RateLimitExceeded { .. }
+                | Self::Timeout { .. }
+                | Self::ProviderUnavailable { .. }
+                | Self::StreamError(_)
+        )
+    }
+
+    /// Get the recommended wait time before retry (in seconds)
+    pub fn recommended_retry_delay(&self) -> Option<u64> {
+        match self {
+            Self::RateLimitExceeded { retry_after, .. } => Some(retry_after.unwrap_or(60)),
+            Self::Timeout { .. } => Some(5),
+            Self::HttpError(_) => Some(2),
+            Self::ProviderUnavailable { .. } => Some(10),
+            _ => None,
         }
     }
 }

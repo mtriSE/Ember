@@ -1,0 +1,97 @@
+{
+  "cli": {
+    "welcome": "Welcome to Ember - AI Agent Framework",
+    "help": "Use --help for more information",
+    "version": "Ember version %{version}",
+    "commands": {
+      "chat": "Start an interactive chat session with an AI model",
+      "serve": "Start the web server with API and UI",
+      "config": "Manage Ember configuration",
+      "tui": "Launch the terminal user interface"
+    }
+  },
+  "errors": {
+    "api_key_missing": "API key for %{provider} is missing. Set it via environment variable or configuration file.",
+    "network": "Network error occurred. Please check your internet connection and try again.",
+    "rate_limit": "Rate limit exceeded. Please wait %{seconds} seconds before retrying.",
+    "model_not_found": "Model '%{model}' not found. Use 'ember config models' to see available models.",
+    "invalid_config": "Invalid configuration for '%{field}'. Please check your settings.",
+    "file_not_found": "File not found: %{path}",
+    "permission_denied": "Permission denied: %{path}",
+    "timeout": "Request timed out. The server may be overloaded. Please try again later.",
+    "authentication": "Authentication failed. Please verify your API key.",
+    "server": "Server error occurred. Please try again later."
+  },
+  "status": {
+    "connecting": "Connecting to %{provider}...",
+    "connected": "Connected to %{provider}",
+    "loading": "Loading...",
+    "processing": "Processing...",
+    "completed": "Completed",
+    "failed": "Failed",
+    "retrying": "Retrying... (attempt %{attempt} of %{max})"
+  },
+  "tools": {
+    "execution_started": "Executing tool: %{tool}",
+    "execution_completed": "Tool '%{tool}' completed successfully",
+    "execution_failed": "Tool '%{tool}' execution failed",
+    "descriptions": {
+      "shell": "Execute shell commands on the system",
+      "filesystem": "Read, write, and manage files and directories",
+      "web": "Fetch web pages and make HTTP requests",
+      "browser": "Control a headless browser for web automation"
+    }
+  },
+  "ui": {
+    "send": "Send",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "settings": "Settings",
+    "conversation": "Conversation",
+    "new_conversation": "New Conversation",
+    "export": "Export",
+    "import": "Import",
+    "chat_placeholder": "Type your message...",
+    "dark_mode": "Dark Mode",
+    "light_mode": "Light Mode"
+  },
+  "providers": {
+    "openai": {
+      "name": "OpenAI",
+      "description": "GPT-4, GPT-3.5, and other OpenAI models"
+    },
+    "anthropic": {
+      "name": "Anthropic",
+      "description": "Claude 3 Opus, Sonnet, and Haiku models"
+    },
+    "ollama": {
+      "name": "Ollama",
+      "description": "Local models with Ollama"
+    },
+    "gemini": {
+      "name": "Google Gemini",
+      "description": "Gemini Pro and other Google AI models"
+    },
+    "groq": {
+      "name": "Groq",
+      "description": "Ultra-fast inference with Groq LPU"
+    },
+    "deepseek": {
+      "name": "DeepSeek",
+      "description": "DeepSeek Chat and Coder models"
+    },
+    "mistral": {
+      "name": "Mistral AI",
+      "description": "Mistral Large, Medium, and Small models"
+    },
+    "openrouter": {
+      "name": "OpenRouter",
+      "description": "Access multiple providers through one API"
+    },
+    "xai": {
+      "name": "xAI",
+      "description": "Grok models from xAI"
+    }
+  }
+}

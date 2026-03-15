@@ -1,0 +1,97 @@
+{
+  "cli": {
+    "welcome": "Willkommen bei Ember - KI-Agenten-Framework",
+    "help": "Verwenden Sie --help für weitere Informationen",
+    "version": "Ember Version %{version}",
+    "commands": {
+      "chat": "Starten Sie eine interaktive Chat-Sitzung mit einem KI-Modell",
+      "serve": "Starten Sie den Webserver mit API und Benutzeroberfläche",
+      "config": "Ember-Konfiguration verwalten",
+      "tui": "Terminal-Benutzeroberfläche starten"
+    }
+  },
+  "errors": {
+    "api_key_missing": "API-Schlüssel für %{provider} fehlt. Setzen Sie ihn über eine Umgebungsvariable oder Konfigurationsdatei.",
+    "network": "Netzwerkfehler aufgetreten. Bitte überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.",
+    "rate_limit": "Rate-Limit überschritten. Bitte warten Sie %{seconds} Sekunden, bevor Sie es erneut versuchen.",
+    "model_not_found": "Modell '%{model}' nicht gefunden. Verwenden Sie 'ember config models' um verfügbare Modelle anzuzeigen.",
+    "invalid_config": "Ungültige Konfiguration für '%{field}'. Bitte überprüfen Sie Ihre Einstellungen.",
+    "file_not_found": "Datei nicht gefunden: %{path}",
+    "permission_denied": "Zugriff verweigert: %{path}",
+    "timeout": "Zeitüberschreitung bei der Anfrage. Der Server ist möglicherweise überlastet. Bitte versuchen Sie es später erneut.",
+    "authentication": "Authentifizierung fehlgeschlagen. Bitte überprüfen Sie Ihren API-Schlüssel.",
+    "server": "Serverfehler aufgetreten. Bitte versuchen Sie es später erneut."
+  },
+  "status": {
+    "connecting": "Verbindung zu %{provider} wird hergestellt...",
+    "connected": "Mit %{provider} verbunden",
+    "loading": "Laden...",
+    "processing": "Verarbeitung...",
+    "completed": "Abgeschlossen",
+    "failed": "Fehlgeschlagen",
+    "retrying": "Erneuter Versuch... (Versuch %{attempt} von %{max})"
+  },
+  "tools": {
+    "execution_started": "Werkzeug wird ausgeführt: %{tool}",
+    "execution_completed": "Werkzeug '%{tool}' erfolgreich abgeschlossen",
+    "execution_failed": "Ausführung von Werkzeug '%{tool}' fehlgeschlagen",
+    "descriptions": {
+      "shell": "Shell-Befehle auf dem System ausführen",
+      "filesystem": "Dateien und Verzeichnisse lesen, schreiben und verwalten",
+      "web": "Webseiten abrufen und HTTP-Anfragen stellen",
+      "browser": "Einen Headless-Browser für Web-Automatisierung steuern"
+    }
+  },
+  "ui": {
+    "send": "Senden",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "delete": "Löschen",
+    "settings": "Einstellungen",
+    "conversation": "Gespräch",
+    "new_conversation": "Neues Gespräch",
+    "export": "Exportieren",
+    "import": "Importieren",
+    "chat_placeholder": "Nachricht eingeben...",
+    "dark_mode": "Dunkelmodus",
+    "light_mode": "Hellmodus"
+  },
+  "providers": {
+    "openai": {
+      "name": "OpenAI",
+      "description": "GPT-4, GPT-3.5 und andere OpenAI-Modelle"
+    },
+    "anthropic": {
+      "name": "Anthropic",
+      "description": "Claude 3 Opus, Sonnet und Haiku Modelle"
+    },
+    "ollama": {
+      "name": "Ollama",
+      "description": "Lokale Modelle mit Ollama"
+    },
+    "gemini": {
+      "name": "Google Gemini",
+      "description": "Gemini Pro und andere Google KI-Modelle"
+    },
+    "groq": {
+      "name": "Groq",
+      "description": "Ultraschnelle Inferenz mit Groq LPU"
+    },
+    "deepseek": {
+      "name": "DeepSeek",
+      "description": "DeepSeek Chat und Coder Modelle"
+    },
+    "mistral": {
+      "name": "Mistral AI",
+      "description": "Mistral Large, Medium und Small Modelle"
+    },
+    "openrouter": {
+      "name": "OpenRouter",
+      "description": "Zugriff auf mehrere Anbieter über eine API"
+    },
+    "xai": {
+      "name": "xAI",
+      "description": "Grok-Modelle von xAI"
+    }
+  }
+}

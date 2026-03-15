@@ -1,0 +1,97 @@
+{
+  "cli": {
+    "welcome": "Bienvenido a Ember - Framework de Agente IA",
+    "help": "Use --help para más información",
+    "version": "Ember versión %{version}",
+    "commands": {
+      "chat": "Iniciar una sesión de chat interactiva con un modelo de IA",
+      "serve": "Iniciar el servidor web con API e interfaz de usuario",
+      "config": "Gestionar la configuración de Ember",
+      "tui": "Iniciar la interfaz de usuario de terminal"
+    }
+  },
+  "errors": {
+    "api_key_missing": "Falta la clave API para %{provider}. Configúrela mediante una variable de entorno o archivo de configuración.",
+    "network": "Se produjo un error de red. Por favor, verifique su conexión a Internet e intente de nuevo.",
+    "rate_limit": "Límite de solicitudes excedido. Por favor, espere %{seconds} segundos antes de reintentar.",
+    "model_not_found": "Modelo '%{model}' no encontrado. Use 'ember config models' para ver los modelos disponibles.",
+    "invalid_config": "Configuración inválida para '%{field}'. Por favor, verifique sus ajustes.",
+    "file_not_found": "Archivo no encontrado: %{path}",
+    "permission_denied": "Permiso denegado: %{path}",
+    "timeout": "Tiempo de espera agotado. El servidor puede estar sobrecargado. Por favor, intente más tarde.",
+    "authentication": "Error de autenticación. Por favor, verifique su clave API.",
+    "server": "Se produjo un error del servidor. Por favor, intente más tarde."
+  },
+  "status": {
+    "connecting": "Conectando a %{provider}...",
+    "connected": "Conectado a %{provider}",
+    "loading": "Cargando...",
+    "processing": "Procesando...",
+    "completed": "Completado",
+    "failed": "Fallido",
+    "retrying": "Reintentando... (intento %{attempt} de %{max})"
+  },
+  "tools": {
+    "execution_started": "Ejecutando herramienta: %{tool}",
+    "execution_completed": "Herramienta '%{tool}' completada con éxito",
+    "execution_failed": "La ejecución de la herramienta '%{tool}' falló",
+    "descriptions": {
+      "shell": "Ejecutar comandos de shell en el sistema",
+      "filesystem": "Leer, escribir y gestionar archivos y directorios",
+      "web": "Obtener páginas web y realizar solicitudes HTTP",
+      "browser": "Controlar un navegador headless para automatización web"
+    }
+  },
+  "ui": {
+    "send": "Enviar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "settings": "Configuración",
+    "conversation": "Conversación",
+    "new_conversation": "Nueva conversación",
+    "export": "Exportar",
+    "import": "Importar",
+    "chat_placeholder": "Escriba su mensaje...",
+    "dark_mode": "Modo oscuro",
+    "light_mode": "Modo claro"
+  },
+  "providers": {
+    "openai": {
+      "name": "OpenAI",
+      "description": "GPT-4, GPT-3.5 y otros modelos de OpenAI"
+    },
+    "anthropic": {
+      "name": "Anthropic",
+      "description": "Modelos Claude 3 Opus, Sonnet y Haiku"
+    },
+    "ollama": {
+      "name": "Ollama",
+      "description": "Modelos locales con Ollama"
+    },
+    "gemini": {
+      "name": "Google Gemini",
+      "description": "Gemini Pro y otros modelos de Google IA"
+    },
+    "groq": {
+      "name": "Groq",
+      "description": "Inferencia ultrarrápida con Groq LPU"
+    },
+    "deepseek": {
+      "name": "DeepSeek",
+      "description": "Modelos DeepSeek Chat y Coder"
+    },
+    "mistral": {
+      "name": "Mistral AI",
+      "description": "Modelos Mistral Large, Medium y Small"
+    },
+    "openrouter": {
+      "name": "OpenRouter",
+      "description": "Acceso a múltiples proveedores a través de una sola API"
+    },
+    "xai": {
+      "name": "xAI",
+      "description": "Modelos Grok de xAI"
+    }
+  }
+}

@@ -20,6 +20,7 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, EnvFilte
 
 mod commands;
 mod config;
+mod error_display;
 
 #[cfg(feature = "tui")]
 mod tui;

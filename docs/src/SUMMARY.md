@@ -15,10 +15,19 @@
 - [Interactive Mode](./guide/interactive.md)
 - [Agent Mode with Tools](./guide/agent-mode.md)
 - [Terminal UI](./guide/tui.md)
-- [Providers](./guide/providers.md)
-  - [Ollama (Local)](./guide/providers/ollama.md)
-  - [OpenAI](./guide/providers/openai.md)
-  - [Anthropic](./guide/providers/anthropic.md)
+
+# Providers
+
+- [Provider Overview](./providers/index.md)
+- [OpenAI](./providers/openai.md)
+- [Anthropic (Claude)](./providers/anthropic.md)
+- [Ollama (Local)](./providers/ollama.md)
+- [Groq](./providers/groq.md)
+- [Google Gemini](./providers/gemini.md)
+- [DeepSeek](./providers/deepseek.md)
+- [Mistral AI](./providers/mistral.md)
+- [OpenRouter](./providers/openrouter.md)
+- [xAI (Grok)](./providers/xai.md)
 
 # Tools
 

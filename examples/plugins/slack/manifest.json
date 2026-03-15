@@ -1,0 +1,418 @@
+{
+  "$schema": "https://ember.dev/schemas/plugin-manifest.json",
+  "id": "ember-slack",
+  "name": "Slack Integration",
+  "version": "1.0.0",
+  "description": "Slack integration plugin for Ember - send messages, manage channels, and automate workflows",
+  "author": {
+    "name": "Ember Team",
+    "email": "plugins@ember.dev",
+    "url": "https://ember.dev"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/ember-ai/ember-plugin-slack",
+  "homepage": "https://ember.dev/plugins/slack",
+  "keywords": [
+    "slack",
+    "messaging",
+    "chat",
+    "notifications",
+    "team",
+    "collaboration",
+    "automation",
+    "webhooks"
+  ],
+  "categories": [
+    "communication",
+    "productivity",
+    "automation"
+  ],
+  "ember_version": ">=1.0.0",
+  "rust_version": ">=1.70.0",
+  "tools": [
+    {
+      "name": "slack_send_message",
+      "description": "Send a message to a Slack channel or user",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "channel": {
+            "type": "string",
+            "description": "Channel name (#general), channel ID (C1234567890), or user ID (@U1234567890)"
+          },
+          "text": {
+            "type": "string",
+            "description": "Message text (supports Slack markdown)"
+          },
+          "thread_ts": {
+            "type": "string",
+            "description": "Thread timestamp to reply to (for threaded messages)"
+          },
+          "unfurl_links": {
+            "type": "boolean",
+            "description": "Enable link previews",
+            "default": true
+          },
+          "unfurl_media": {
+            "type": "boolean",
+            "description": "Enable media previews",
+            "default": true
+          }
+        },
+        "required": ["channel", "text"]
+      }
+    },
+    {
+      "name": "slack_send_blocks",
+      "description": "Send a rich message with Block Kit components",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "channel": {
+            "type": "string",
+            "description": "Channel name or ID"
+          },
+          "blocks": {
+            "type": "array",
+            "description": "Array of Block Kit block objects"
+          },
+          "text": {
+            "type": "string",
+            "description": "Fallback text for notifications"
+          },
+          "thread_ts": {
+            "type": "string",
+            "description": "Thread timestamp for replies"
+          }
+        },
+        "required": ["channel", "blocks"]
+      }
+    },
+    {
+      "name": "slack_list_channels",
+      "description": "List Slack channels in the workspace",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "types": {
+            "type": "string",
+            "description": "Channel types to include",
+            "enum": ["public_channel", "private_channel", "mpim", "im"],
+            "default": "public_channel"
+          },
+          "exclude_archived": {
+            "type": "boolean",
+            "description": "Exclude archived channels",
+            "default": true
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Maximum channels to return (1-1000)",
+            "default": 100
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "name": "slack_get_channel_info",
+      "description": "Get detailed information about a channel",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "channel": {
+            "type": "string",
+            "description": "Channel ID or name"
+          }
+        },
+        "required": ["channel"]
+      }
+    },
+    {
+      "name": "slack_get_channel_history",
+      "description": "Get recent messages from a channel",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "channel": {
+            "type": "string",
+            "description": "Channel ID or name"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of messages to retrieve (1-1000)",
+            "default": 50
+          },
+          "oldest": {
+            "type": "string",
+            "description": "Start of time range (Unix timestamp)"
+          },
+          "latest": {
+            "type": "string",
+            "description": "End of time range (Unix timestamp)"
+          }
+        },
+        "required": ["channel"]
+      }
+    },
+    {
+      "name": "slack_search_messages",
+      "description": "Search for messages in the workspace",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Search query (supports Slack search modifiers)"
+          },
+          "sort": {
+            "type": "string",
+            "description": "Sort order",
+            "enum": ["score", "timestamp"],
+            "default": "score"
+          },
+          "sort_dir": {
+            "type": "string",
+            "description": "Sort direction",
+            "enum": ["asc", "desc"],
+            "default": "desc"
+          },
+          "count": {
+            "type": "integer",
+            "description": "Number of results (1-100)",
+            "default": 20
+          }
+        },
+        "required": ["query"]
+      }
+    },
+    {
+      "name": "slack_list_users",
+      "description": "List users in the workspace",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "include_locale": {
+            "type": "boolean",
+            "description": "Include locale information",
+            "default": false
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Maximum users to return (1-1000)",
+            "default": 100
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "name": "slack_get_user_info",
+      "description": "Get detailed information about a user",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "string",
+            "description": "User ID (e.g., U1234567890)"
+          }
+        },
+        "required": ["user"]
+      }
+    },
+    {
+      "name": "slack_set_status",
+      "description": "Set the bot's status or a user's status",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "status_text": {
+            "type": "string",
+            "description": "Status text (max 100 characters)"
+          },
+          "status_emoji": {
+            "type": "string",
+            "description": "Status emoji (e.g., :coffee:)"
+          },
+          "status_expiration": {
+            "type": "integer",
+            "description": "Unix timestamp when status expires (0 for no expiration)"
+          }
+        },
+        "required": ["status_text"]
+      }
+    },
+    {
+      "name": "slack_add_reaction",
+      "description": "Add an emoji reaction to a message",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "channel": {
+            "type": "string",
+            "description": "Channel containing the message"
+          },
+          "timestamp": {
+            "type": "string",
+            "description": "Message timestamp"
+          },
+          "name": {
+            "type": "string",
+            "description": "Emoji name without colons (e.g., thumbsup)"
+          }
+        },
+        "required": ["channel", "timestamp", "name"]
+      }
+    },
+    {
+      "name": "slack_upload_file",
+      "description": "Upload a file to Slack",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "channels": {
+            "type": "string",
+            "description": "Comma-separated channel IDs to share file in"
+          },
+          "content": {
+            "type": "string",
+            "description": "File content (for text files)"
+          },
+          "filename": {
+            "type": "string",
+            "description": "Filename"
+          },
+          "filetype": {
+            "type": "string",
+            "description": "File type identifier (e.g., 'python', 'json', 'markdown')"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of the file"
+          },
+          "initial_comment": {
+            "type": "string",
+            "description": "Message to include with the file"
+          },
+          "thread_ts": {
+            "type": "string",
+            "description": "Thread timestamp to upload to"
+          }
+        },
+        "required": ["channels", "content", "filename"]
+      }
+    },
+    {
+      "name": "slack_create_channel",
+      "description": "Create a new Slack channel",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Channel name (lowercase, no spaces, max 80 chars)"
+          },
+          "is_private": {
+            "type": "boolean",
+            "description": "Create as private channel",
+            "default": false
+          },
+          "description": {
+            "type": "string",
+            "description": "Channel description"
+          }
+        },
+        "required": ["name"]
+      }
+    },
+    {
+      "name": "slack_invite_to_channel",
+      "description": "Invite users to a channel",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "channel": {
+            "type": "string",
+            "description": "Channel ID"
+          },
+          "users": {
+            "type": "string",
+            "description": "Comma-separated user IDs to invite"
+          }
+        },
+        "required": ["channel", "users"]
+      }
+    },
+    {
+      "name": "slack_set_channel_topic",
+      "description": "Set a channel's topic",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "channel": {
+            "type": "string",
+            "description": "Channel ID"
+          },
+          "topic": {
+            "type": "string",
+            "description": "New channel topic (max 250 chars)"
+          }
+        },
+        "required": ["channel", "topic"]
+      }
+    }
+  ],
+  "config": {
+    "bot_token": {
+      "type": "string",
+      "description": "Slack Bot User OAuth Token (xoxb-...)",
+      "required": true,
+      "secret": true,
+      "env_var": "SLACK_BOT_TOKEN"
+    },
+    "app_token": {
+      "type": "string",
+      "description": "Slack App-Level Token for Socket Mode (xapp-...)",
+      "required": false,
+      "secret": true,
+      "env_var": "SLACK_APP_TOKEN"
+    },
+    "signing_secret": {
+      "type": "string",
+      "description": "Slack Signing Secret for request verification",
+      "required": false,
+      "secret": true,
+      "env_var": "SLACK_SIGNING_SECRET"
+    },
+    "default_channel": {
+      "type": "string",
+      "description": "Default channel for messages",
+      "required": false
+    },
+    "rate_limit_retries": {
+      "type": "integer",
+      "description": "Number of retries on rate limit",
+      "default": 3,
+      "minimum": 0,
+      "maximum": 10
+    }
+  },
+  "permissions": [
+    "network:slack.com",
+    "network:api.slack.com",
+    "env:SLACK_BOT_TOKEN",
+    "env:SLACK_APP_TOKEN"
+  ],
+  "dependencies": [],
+  "assets": {
+    "icon": "assets/slack-icon.svg",
+    "screenshots": [
+      "assets/screenshot-messages.png",
+      "assets/screenshot-channels.png",
+      "assets/screenshot-blocks.png"
+    ]
+  },
+  "changelog": {
+    "1.0.0": "Initial release with messaging, channels, users, and file upload support"
+  }
+}

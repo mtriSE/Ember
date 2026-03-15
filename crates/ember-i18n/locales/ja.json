@@ -1,0 +1,97 @@
+{
+  "cli": {
+    "welcome": "Ember へようこそ - AI エージェントフレームワーク",
+    "help": "詳細は --help をご使用ください",
+    "version": "Ember バージョン %{version}",
+    "commands": {
+      "chat": "AI モデルとのインタラクティブチャットセッションを開始",
+      "serve": "API と UI を含む Web サーバーを起動",
+      "config": "Ember の設定を管理",
+      "tui": "ターミナルユーザーインターフェースを起動"
+    }
+  },
+  "errors": {
+    "api_key_missing": "%{provider} の API キーがありません。環境変数または設定ファイルで設定してください。",
+    "network": "ネットワークエラーが発生しました。インターネット接続を確認して再試行してください。",
+    "rate_limit": "リクエスト制限を超えました。%{seconds} 秒後に再試行してください。",
+    "model_not_found": "モデル '%{model}' が見つかりません。'ember config models' で利用可能なモデルを確認してください。",
+    "invalid_config": "'%{field}' の設定が無効です。設定を確認してください。",
+    "file_not_found": "ファイルが見つかりません：%{path}",
+    "permission_denied": "アクセスが拒否されました：%{path}",
+    "timeout": "リクエストがタイムアウトしました。サーバーが過負荷の可能性があります。後でもう一度お試しください。",
+    "authentication": "認証に失敗しました。API キーを確認してください。",
+    "server": "サーバーエラーが発生しました。後でもう一度お試しください。"
+  },
+  "status": {
+    "connecting": "%{provider} に接続中...",
+    "connected": "%{provider} に接続しました",
+    "loading": "読み込み中...",
+    "processing": "処理中...",
+    "completed": "完了",
+    "failed": "失敗",
+    "retrying": "再試行中...（%{attempt}/%{max} 回目）"
+  },
+  "tools": {
+    "execution_started": "ツールを実行中：%{tool}",
+    "execution_completed": "ツール '%{tool}' が正常に完了しました",
+    "execution_failed": "ツール '%{tool}' の実行に失敗しました",
+    "descriptions": {
+      "shell": "システム上でシェルコマンドを実行",
+      "filesystem": "ファイルとディレクトリの読み取り、書き込み、管理",
+      "web": "Web ページの取得と HTTP リクエストの実行",
+      "browser": "Web 自動化のためのヘッドレスブラウザの制御"
+    }
+  },
+  "ui": {
+    "send": "送信",
+    "cancel": "キャンセル",
+    "save": "保存",
+    "delete": "削除",
+    "settings": "設定",
+    "conversation": "会話",
+    "new_conversation": "新しい会話",
+    "export": "エクスポート",
+    "import": "インポート",
+    "chat_placeholder": "メッセージを入力...",
+    "dark_mode": "ダークモード",
+    "light_mode": "ライトモード"
+  },
+  "providers": {
+    "openai": {
+      "name": "OpenAI",
+      "description": "GPT-4、GPT-3.5 およびその他の OpenAI モデル"
+    },
+    "anthropic": {
+      "name": "Anthropic",
+      "description": "Claude 3 Opus、Sonnet、Haiku モデル"
+    },
+    "ollama": {
+      "name": "Ollama",
+      "description": "Ollama を使用したローカルモデル"
+    },
+    "gemini": {
+      "name": "Google Gemini",
+      "description": "Gemini Pro およびその他の Google AI モデル"
+    },
+    "groq": {
+      "name": "Groq",
+      "description": "Groq LPU による超高速推論"
+    },
+    "deepseek": {
+      "name": "DeepSeek",
+      "description": "DeepSeek Chat および Coder モデル"
+    },
+    "mistral": {
+      "name": "Mistral AI",
+      "description": "Mistral Large、Medium、Small モデル"
+    },
+    "openrouter": {
+      "name": "OpenRouter",
+      "description": "単一の API で複数のプロバイダーにアクセス"
+    },
+    "xai": {
+      "name": "xAI",
+      "description": "xAI の Grok モデル"
+    }
+  }
+}

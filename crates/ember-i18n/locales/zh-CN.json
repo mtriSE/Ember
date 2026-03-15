@@ -1,0 +1,97 @@
+{
+  "cli": {
+    "welcome": "欢迎使用 Ember - AI 代理框架",
+    "help": "使用 --help 获取更多信息",
+    "version": "Ember 版本 %{version}",
+    "commands": {
+      "chat": "与 AI 模型开始交互式聊天会话",
+      "serve": "启动带有 API 和用户界面的 Web 服务器",
+      "config": "管理 Ember 配置",
+      "tui": "启动终端用户界面"
+    }
+  },
+  "errors": {
+    "api_key_missing": "%{provider} 的 API 密钥缺失。请通过环境变量或配置文件进行设置。",
+    "network": "发生网络错误。请检查您的互联网连接并重试。",
+    "rate_limit": "超出请求限制。请等待 %{seconds} 秒后重试。",
+    "model_not_found": "未找到模型 '%{model}'。使用 'ember config models' 查看可用模型。",
+    "invalid_config": "'%{field}' 的配置无效。请检查您的设置。",
+    "file_not_found": "未找到文件：%{path}",
+    "permission_denied": "权限被拒绝：%{path}",
+    "timeout": "请求超时。服务器可能过载。请稍后重试。",
+    "authentication": "认证失败。请验证您的 API 密钥。",
+    "server": "发生服务器错误。请稍后重试。"
+  },
+  "status": {
+    "connecting": "正在连接到 %{provider}...",
+    "connected": "已连接到 %{provider}",
+    "loading": "加载中...",
+    "processing": "处理中...",
+    "completed": "已完成",
+    "failed": "失败",
+    "retrying": "重试中...（第 %{attempt} 次，共 %{max} 次）"
+  },
+  "tools": {
+    "execution_started": "正在执行工具：%{tool}",
+    "execution_completed": "工具 '%{tool}' 执行成功",
+    "execution_failed": "工具 '%{tool}' 执行失败",
+    "descriptions": {
+      "shell": "在系统上执行 shell 命令",
+      "filesystem": "读取、写入和管理文件及目录",
+      "web": "获取网页并发送 HTTP 请求",
+      "browser": "控制无头浏览器进行网页自动化"
+    }
+  },
+  "ui": {
+    "send": "发送",
+    "cancel": "取消",
+    "save": "保存",
+    "delete": "删除",
+    "settings": "设置",
+    "conversation": "对话",
+    "new_conversation": "新对话",
+    "export": "导出",
+    "import": "导入",
+    "chat_placeholder": "输入您的消息...",
+    "dark_mode": "深色模式",
+    "light_mode": "浅色模式"
+  },
+  "providers": {
+    "openai": {
+      "name": "OpenAI",
+      "description": "GPT-4、GPT-3.5 及其他 OpenAI 模型"
+    },
+    "anthropic": {
+      "name": "Anthropic",
+      "description": "Claude 3 Opus、Sonnet 和 Haiku 模型"
+    },
+    "ollama": {
+      "name": "Ollama",
+      "description": "使用 Ollama 的本地模型"
+    },
+    "gemini": {
+      "name": "Google Gemini",
+      "description": "Gemini Pro 及其他 Google AI 模型"
+    },
+    "groq": {
+      "name": "Groq",
+      "description": "使用 Groq LPU 的超快速推理"
+    },
+    "deepseek": {
+      "name": "DeepSeek",
+      "description": "DeepSeek Chat 和 Coder 模型"
+    },
+    "mistral": {
+      "name": "Mistral AI",
+      "description": "Mistral Large、Medium 和 Small 模型"
+    },
+    "openrouter": {
+      "name": "OpenRouter",
+      "description": "通过单一 API 访问多个提供商"
+    },
+    "xai": {
+      "name": "xAI",
+      "description": "xAI 的 Grok 模型"
+    }
+  }
+}

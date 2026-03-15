@@ -20,19 +20,38 @@
     "commands": [
       {
         "command": "ember.chat",
-        "title": "Ember: Open Chat"
+        "title": "Ember: Open Chat",
+        "icon": "$(comment-discussion)"
       },
       {
         "command": "ember.explain",
-        "title": "Ember: Explain Selection"
+        "title": "Ember: Explain Selection",
+        "icon": "$(question)"
       },
       {
         "command": "ember.improve",
-        "title": "Ember: Improve Selection"
+        "title": "Ember: Improve Selection",
+        "icon": "$(sparkle)"
       },
       {
         "command": "ember.generateTests",
-        "title": "Ember: Generate Tests"
+        "title": "Ember: Generate Tests",
+        "icon": "$(beaker)"
+      },
+      {
+        "command": "ember.fixCode",
+        "title": "Ember: Fix Code",
+        "icon": "$(wrench)"
+      },
+      {
+        "command": "ember.addDocs",
+        "title": "Ember: Add Documentation",
+        "icon": "$(book)"
+      },
+      {
+        "command": "ember.refactor",
+        "title": "Ember: Refactor Selection",
+        "icon": "$(edit)"
       }
     ],
     "configuration": {
@@ -52,6 +71,32 @@
           "type": "boolean",
           "default": false,
           "description": "Automatically start Ember server"
+        },
+        "ember.inlineCompletions.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable AI-powered inline code completions"
+        },
+        "ember.inlineCompletions.debounceMs": {
+          "type": "number",
+          "default": 500,
+          "minimum": 100,
+          "maximum": 2000,
+          "description": "Delay in milliseconds before triggering inline completions"
+        },
+        "ember.inlineCompletions.maxTokens": {
+          "type": "number",
+          "default": 100,
+          "minimum": 10,
+          "maximum": 500,
+          "description": "Maximum tokens for inline completions"
+        },
+        "ember.temperature": {
+          "type": "number",
+          "default": 0.7,
+          "minimum": 0,
+          "maximum": 2,
+          "description": "Temperature for model responses (0 = precise, 2 = creative)"
         }
       }
     },
@@ -76,22 +121,55 @@
     "menus": {
       "editor/context": [
         {
-          "command": "ember.explain",
-          "when": "editorHasSelection",
-          "group": "ember"
-        },
-        {
-          "command": "ember.improve",
+          "submenu": "ember.submenu",
           "when": "editorHasSelection",
           "group": "ember"
         }
+      ],
+      "ember.submenu": [
+        {
+          "command": "ember.explain",
+          "group": "1_understand"
+        },
+        {
+          "command": "ember.improve",
+          "group": "2_improve"
+        },
+        {
+          "command": "ember.fixCode",
+          "group": "2_improve"
+        },
+        {
+          "command": "ember.refactor",
+          "group": "2_improve"
+        },
+        {
+          "command": "ember.addDocs",
+          "group": "3_document"
+        },
+        {
+          "command": "ember.generateTests",
+          "group": "4_test"
+        }
       ]
     },
+    "submenus": [
+      {
+        "id": "ember.submenu",
+        "label": "Ember AI"
+      }
+    ],
     "keybindings": [
       {
         "command": "ember.chat",
         "key": "ctrl+shift+e",
         "mac": "cmd+shift+e"
+      },
+      {
+        "command": "ember.explain",
+        "key": "ctrl+shift+/",
+        "mac": "cmd+shift+/",
+        "when": "editorHasSelection"
       }
     ]
   },

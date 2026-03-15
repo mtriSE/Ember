@@ -1,0 +1,381 @@
+{
+  "$schema": "https://ember.dev/schemas/plugin-manifest.json",
+  "id": "ember-github",
+  "name": "GitHub Integration",
+  "version": "1.0.0",
+  "description": "GitHub integration plugin for Ember - manage repositories, issues, pull requests, and more",
+  "author": {
+    "name": "Ember Team",
+    "email": "plugins@ember.dev",
+    "url": "https://ember.dev"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/ember-ai/ember-plugin-github",
+  "homepage": "https://ember.dev/plugins/github",
+  "keywords": [
+    "github",
+    "git",
+    "repository",
+    "issues",
+    "pull-requests",
+    "actions",
+    "ci-cd",
+    "version-control"
+  ],
+  "categories": [
+    "development",
+    "version-control",
+    "automation"
+  ],
+  "ember_version": ">=1.0.0",
+  "rust_version": ">=1.70.0",
+  "tools": [
+    {
+      "name": "github_search_repos",
+      "description": "Search GitHub repositories by query",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Search query (e.g., 'rust async' or 'language:rust stars:>1000')"
+          },
+          "sort": {
+            "type": "string",
+            "description": "Sort results by",
+            "enum": ["stars", "forks", "updated", "help-wanted-issues"],
+            "default": "stars"
+          },
+          "order": {
+            "type": "string",
+            "description": "Sort order",
+            "enum": ["asc", "desc"],
+            "default": "desc"
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Results per page (1-100)",
+            "default": 10,
+            "minimum": 1,
+            "maximum": 100
+          }
+        },
+        "required": ["query"]
+      }
+    },
+    {
+      "name": "github_get_repo",
+      "description": "Get detailed information about a GitHub repository",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string",
+            "description": "Repository owner (username or organization)"
+          },
+          "repo": {
+            "type": "string",
+            "description": "Repository name"
+          }
+        },
+        "required": ["owner", "repo"]
+      }
+    },
+    {
+      "name": "github_list_issues",
+      "description": "List issues in a repository",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string",
+            "description": "Repository owner"
+          },
+          "repo": {
+            "type": "string",
+            "description": "Repository name"
+          },
+          "state": {
+            "type": "string",
+            "description": "Issue state filter",
+            "enum": ["open", "closed", "all"],
+            "default": "open"
+          },
+          "labels": {
+            "type": "string",
+            "description": "Comma-separated list of labels to filter by"
+          },
+          "sort": {
+            "type": "string",
+            "description": "Sort issues by",
+            "enum": ["created", "updated", "comments"],
+            "default": "created"
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Results per page (1-100)",
+            "default": 30
+          }
+        },
+        "required": ["owner", "repo"]
+      }
+    },
+    {
+      "name": "github_create_issue",
+      "description": "Create a new issue in a repository",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string",
+            "description": "Repository owner"
+          },
+          "repo": {
+            "type": "string",
+            "description": "Repository name"
+          },
+          "title": {
+            "type": "string",
+            "description": "Issue title"
+          },
+          "body": {
+            "type": "string",
+            "description": "Issue body (Markdown supported)"
+          },
+          "labels": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Labels to assign to the issue"
+          },
+          "assignees": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Usernames to assign to the issue"
+          }
+        },
+        "required": ["owner", "repo", "title"]
+      }
+    },
+    {
+      "name": "github_list_prs",
+      "description": "List pull requests in a repository",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string",
+            "description": "Repository owner"
+          },
+          "repo": {
+            "type": "string",
+            "description": "Repository name"
+          },
+          "state": {
+            "type": "string",
+            "description": "PR state filter",
+            "enum": ["open", "closed", "all"],
+            "default": "open"
+          },
+          "sort": {
+            "type": "string",
+            "description": "Sort PRs by",
+            "enum": ["created", "updated", "popularity", "long-running"],
+            "default": "created"
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Results per page (1-100)",
+            "default": 30
+          }
+        },
+        "required": ["owner", "repo"]
+      }
+    },
+    {
+      "name": "github_get_pr",
+      "description": "Get detailed information about a pull request",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string",
+            "description": "Repository owner"
+          },
+          "repo": {
+            "type": "string",
+            "description": "Repository name"
+          },
+          "pr_number": {
+            "type": "integer",
+            "description": "Pull request number"
+          }
+        },
+        "required": ["owner", "repo", "pr_number"]
+      }
+    },
+    {
+      "name": "github_list_commits",
+      "description": "List commits in a repository",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string",
+            "description": "Repository owner"
+          },
+          "repo": {
+            "type": "string",
+            "description": "Repository name"
+          },
+          "sha": {
+            "type": "string",
+            "description": "Branch name or commit SHA to start listing from"
+          },
+          "path": {
+            "type": "string",
+            "description": "Only commits containing this file path"
+          },
+          "author": {
+            "type": "string",
+            "description": "GitHub username or email to filter by"
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Results per page (1-100)",
+            "default": 30
+          }
+        },
+        "required": ["owner", "repo"]
+      }
+    },
+    {
+      "name": "github_get_file",
+      "description": "Get contents of a file from a repository",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string",
+            "description": "Repository owner"
+          },
+          "repo": {
+            "type": "string",
+            "description": "Repository name"
+          },
+          "path": {
+            "type": "string",
+            "description": "File path in the repository"
+          },
+          "ref": {
+            "type": "string",
+            "description": "Branch, tag, or commit SHA (default: default branch)"
+          }
+        },
+        "required": ["owner", "repo", "path"]
+      }
+    },
+    {
+      "name": "github_list_workflows",
+      "description": "List GitHub Actions workflows in a repository",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string",
+            "description": "Repository owner"
+          },
+          "repo": {
+            "type": "string",
+            "description": "Repository name"
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Results per page (1-100)",
+            "default": 30
+          }
+        },
+        "required": ["owner", "repo"]
+      }
+    },
+    {
+      "name": "github_get_workflow_runs",
+      "description": "Get recent workflow runs for a repository",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string",
+            "description": "Repository owner"
+          },
+          "repo": {
+            "type": "string",
+            "description": "Repository name"
+          },
+          "workflow_id": {
+            "type": "string",
+            "description": "Workflow ID or filename (optional, for specific workflow)"
+          },
+          "branch": {
+            "type": "string",
+            "description": "Filter by branch name"
+          },
+          "status": {
+            "type": "string",
+            "description": "Filter by status",
+            "enum": ["completed", "in_progress", "queued", "pending", "waiting"]
+          },
+          "per_page": {
+            "type": "integer",
+            "description": "Results per page (1-100)",
+            "default": 10
+          }
+        },
+        "required": ["owner", "repo"]
+      }
+    }
+  ],
+  "config": {
+    "token": {
+      "type": "string",
+      "description": "GitHub Personal Access Token",
+      "required": true,
+      "secret": true,
+      "env_var": "GITHUB_TOKEN"
+    },
+    "api_url": {
+      "type": "string",
+      "description": "GitHub API URL (for GitHub Enterprise)",
+      "default": "https://api.github.com",
+      "required": false
+    },
+    "default_owner": {
+      "type": "string",
+      "description": "Default repository owner for commands",
+      "required": false
+    },
+    "timeout": {
+      "type": "integer",
+      "description": "Request timeout in seconds",
+      "default": 30,
+      "minimum": 5,
+      "maximum": 120
+    }
+  },
+  "permissions": [
+    "network:github.com",
+    "network:api.github.com",
+    "env:GITHUB_TOKEN"
+  ],
+  "dependencies": [],
+  "assets": {
+    "icon": "assets/github-icon.svg",
+    "screenshots": [
+      "assets/screenshot-search.png",
+      "assets/screenshot-issues.png",
+      "assets/screenshot-prs.png"
+    ]
+  },
+  "changelog": {
+    "1.0.0": "Initial release with repository, issue, PR, and Actions support"
+  }
+}

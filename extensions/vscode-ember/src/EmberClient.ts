@@ -17,6 +17,19 @@ interface ChatResponse {
     conversation_id?: string;
 }
 
+interface CompletionOptions {
+    model?: string;
+    maxTokens?: number;
+    stop?: string[];
+    temperature?: number;
+}
+
+interface CompletionResponse {
+    completion: string;
+    model?: string;
+    tokens_used?: number;
+}
+
 export class EmberClient {
     private serverUrl: string;
 
@@ -120,5 +133,61 @@ export class EmberClient {
 
         streamRequest();
         return () => controller.abort();
+    }
+
+    /**
+     * Get a completion from the API (non-streaming).
+     * Used for inline completions and code generation.
+     */
+    async complete(
+        prompt: string,
+        options: CompletionOptions = {}
+    ): Promise<string> {
+        try {
+            const response = await fetch(`${this.serverUrl}/api/v1/complete`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    prompt,
+                    model: options.model,
+                    max_tokens: options.maxTokens,
+                    stop: options.stop,
+                    temperature: options.temperature,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Completion request failed: ${response.statusText}`);
+            }
+
+            const data: CompletionResponse = await response.json();
+            return data.completion;
+        } catch (error) {
+            // Fallback to chat endpoint if complete endpoint doesn't exist
+            return this.chat(prompt, { model: options.model });
+        }
+    }
+
+    /**
+     * Get server information.
+     */
+    async getInfo(): Promise<{ name: string; version: string; llm_provider: string }> {
+        const response = await fetch(`${this.serverUrl}/api/v1/info`);
+        if (!response.ok) {
+            throw new Error(`Failed to get server info: ${response.statusText}`);
+        }
+        return response.json();
+    }
+
+    /**
+     * Get available models.
+     */
+    async getModels(): Promise<{ id: string; name: string; provider: string }[]> {
+        const response = await fetch(`${this.serverUrl}/api/v1/models`);
+        if (!response.ok) {
+            throw new Error(`Failed to get models: ${response.statusText}`);
+        }
+        const data = await response.json();
+        return data.models || [];
     }
 }
