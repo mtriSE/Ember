@@ -724,27 +724,282 @@
                 height: 80px;
             }
             
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+                padding: 0 0.5rem;
+            }
+            
+            .hero-code {
+                padding: 1rem;
+                margin: 0 0.5rem;
+            }
+            
+            .hero-code pre {
+                font-size: 0.75rem;
+            }
+            
             .stats {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 1.5rem;
+                gap: 1rem;
+                padding: 2rem 1rem;
             }
             
             .stat-value {
-                font-size: 2rem;
+                font-size: 1.75rem;
+            }
+            
+            .stat-label {
+                font-size: 0.8rem;
+            }
+            
+            .features {
+                padding: 4rem 1rem;
             }
             
             .features-grid {
                 grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .feature-card {
+                padding: 1.5rem;
+                opacity: 0;
+                transform: translateY(30px);
+                transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            }
+            
+            .feature-card.animate-in {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            
+            .feature-card:nth-child(1) { transition-delay: 0s; }
+            .feature-card:nth-child(2) { transition-delay: 0.1s; }
+            .feature-card:nth-child(3) { transition-delay: 0.15s; }
+            .feature-card:nth-child(4) { transition-delay: 0.2s; }
+            .feature-card:nth-child(5) { transition-delay: 0.25s; }
+            .feature-card:nth-child(6) { transition-delay: 0.3s; }
+            .feature-card:nth-child(7) { transition-delay: 0.35s; }
+            .feature-card:nth-child(8) { transition-delay: 0.4s; }
+            .feature-card:nth-child(9) { transition-delay: 0.45s; }
+            
+            .feature-icon {
+                width: 40px;
+                height: 40px;
+                margin-bottom: 1rem;
+            }
+            
+            .feature-card h3 {
+                font-size: 1.1rem;
+            }
+            
+            .feature-card p {
+                font-size: 0.9rem;
+            }
+            
+            .section-header {
+                margin-bottom: 2.5rem;
+                padding: 0 0.5rem;
+            }
+            
+            .section-header h2 {
+                font-size: 1.75rem;
+            }
+            
+            .section-header p {
+                font-size: 1rem;
+            }
+            
+            .comparison {
+                padding: 4rem 1rem;
+            }
+            
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.75rem;
+            }
+            
+            .providers {
+                padding: 4rem 1rem;
+            }
+            
+            .providers-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+            
+            .provider-card {
+                padding: 1rem;
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+                transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            }
+            
+            .provider-card.animate-in {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            
+            .provider-card:nth-child(1) { transition-delay: 0s; }
+            .provider-card:nth-child(2) { transition-delay: 0.05s; }
+            .provider-card:nth-child(3) { transition-delay: 0.1s; }
+            .provider-card:nth-child(4) { transition-delay: 0.15s; }
+            .provider-card:nth-child(5) { transition-delay: 0.2s; }
+            .provider-card:nth-child(6) { transition-delay: 0.25s; }
+            .provider-card:nth-child(7) { transition-delay: 0.3s; }
+            .provider-card:nth-child(8) { transition-delay: 0.35s; }
+            .provider-card:nth-child(9) { transition-delay: 0.4s; }
+            
+            .provider-name {
+                font-size: 0.9rem;
+            }
+            
+            .provider-tag {
+                font-size: 0.7rem;
+            }
+            
+            .install {
+                padding: 4rem 1rem;
+            }
+            
+            .install-options {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .install-card {
+                padding: 1.5rem;
+                opacity: 0;
+                transform: translateX(-20px);
+                transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            }
+            
+            .install-card.animate-in {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            
+            .install-card:nth-child(1) { transition-delay: 0s; }
+            .install-card:nth-child(2) { transition-delay: 0.1s; }
+            .install-card:nth-child(3) { transition-delay: 0.2s; }
+            .install-card:nth-child(4) { transition-delay: 0.3s; }
+            
+            .install-code {
+                font-size: 0.75rem;
+                padding: 0.75rem;
+            }
+            
+            .cta {
+                padding: 5rem 1.5rem;
+            }
+            
+            .cta h2 {
+                font-size: 1.75rem;
+            }
+            
+            .cta p {
+                font-size: 1rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-buttons .btn {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
             }
             
             .footer-container {
                 flex-direction: column;
                 text-align: center;
+                gap: 1.5rem;
             }
             
             .footer-links {
                 flex-wrap: wrap;
                 justify-content: center;
+                gap: 1rem;
+            }
+            
+            /* Smooth card reveal for stats */
+            .stat {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            }
+            
+            .stat.animate-in {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            
+            .stat:nth-child(1) { transition-delay: 0s; }
+            .stat:nth-child(2) { transition-delay: 0.1s; }
+            .stat:nth-child(3) { transition-delay: 0.2s; }
+            .stat:nth-child(4) { transition-delay: 0.3s; }
+        }
+        
+        /* Extra small screens */
+        @media (max-width: 480px) {
+            .hero {
+                padding: 6rem 1rem 2rem;
+            }
+            
+            .hero-logo {
+                width: 64px;
+                height: 64px;
+            }
+            
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+            
+            .hero-cta {
+                flex-direction: column;
+                width: 100%;
+                padding: 0 1rem;
+            }
+            
+            .hero-cta .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+            
+            .stat-value {
+                font-size: 1.5rem;
+            }
+            
+            .providers-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .comparison-table-container {
+                margin: 0 -0.5rem;
+            }
+            
+            .comparison-table th:first-child,
+            .comparison-table td:first-child {
+                position: sticky;
+                left: 0;
+                background: var(--bg-primary);
+                z-index: 1;
+            }
+            
+            .comparison-table th:first-child {
+                background: var(--bg-secondary);
             }
         }
         
