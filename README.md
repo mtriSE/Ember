@@ -31,7 +31,7 @@ Contact: [niklas.marder@gmail.com](mailto:niklas.marder@gmail.com)
 
 > **"The first AI agent framework that respects your time, your memory, and your privacy."**
 
-<table>
+<table width="100%">
 <tr>
 <th width="50%">Traditional Agents</th>
 <th width="50%">Ember</th>
@@ -90,13 +90,20 @@ ember chat "Write me a Python script that finds all TODOs in my codebase"
 
 ## Speed Comparison
 
-| | LangChain | AutoGPT | CrewAI | **Ember** |
-|---|---|---|---|---|
-| **Install Time** | 15 min | 20 min | 10 min | **5 sec** |
-| **Cold Start** | 2.3s | 4.1s | 1.8s | **80ms** |
-| **Memory** | 450MB | 800MB | 380MB | **45MB** |
-| **Dependencies** | 500+ | 300+ | 200+ | **0** |
-| **Works Offline** | No | No | No | **Yes** |
+<table width="100%">
+<tr>
+<th width="20%"></th>
+<th width="20%">LangChain</th>
+<th width="20%">AutoGPT</th>
+<th width="20%">CrewAI</th>
+<th width="20%"><b>Ember</b></th>
+</tr>
+<tr><td><b>Install Time</b></td><td align="center">15 min</td><td align="center">20 min</td><td align="center">10 min</td><td align="center"><b>5 sec</b></td></tr>
+<tr><td><b>Cold Start</b></td><td align="center">2.3s</td><td align="center">4.1s</td><td align="center">1.8s</td><td align="center"><b>80ms</b></td></tr>
+<tr><td><b>Memory</b></td><td align="center">450MB</td><td align="center">800MB</td><td align="center">380MB</td><td align="center"><b>45MB</b></td></tr>
+<tr><td><b>Dependencies</b></td><td align="center">500+</td><td align="center">300+</td><td align="center">200+</td><td align="center"><b>0</b></td></tr>
+<tr><td><b>Works Offline</b></td><td align="center">No</td><td align="center">No</td><td align="center">No</td><td align="center"><b>Yes</b></td></tr>
+</table>
 
 *Measured on M2 MacBook Pro. [See benchmarks](docs/benchmarks.md)*
 
