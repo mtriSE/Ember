@@ -307,7 +307,7 @@ let response = complete_with_retry(&provider, request, &config).await?;
 - **Self-Hosted** - Deploy on your infrastructure
 - **SLA Support** - 99.9% uptime guarantee
 
-Contact: enterprise@ember.dev
+Contact: niklas.marder@gmail.com
 
 ---
 
