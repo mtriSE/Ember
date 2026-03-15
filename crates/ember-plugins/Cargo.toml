@@ -9,11 +9,12 @@ keywords = ["ai", "agent", "wasm", "plugins", "extensible"]
 categories = ["wasm"]
 
 [features]
-default = ["wasmtime"]
+default = ["wasmtime", "sdk"]
 wasmtime = ["dep:wasmtime", "dep:wasmtime-wasi"]
 marketplace = ["dep:reqwest", "dep:md5", "dep:chrono"]
 hot-reload = ["dep:notify", "dep:chrono"]
-full = ["wasmtime", "marketplace", "hot-reload"]
+sdk = ["dep:chrono"]
+full = ["wasmtime", "marketplace", "hot-reload", "sdk"]
 
 [dependencies]
 # WASM runtime (uses workspace versions)

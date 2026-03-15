@@ -80,6 +80,9 @@ pub mod marketplace;
 #[cfg(feature = "hot-reload")]
 pub mod hot_reload;
 
+#[cfg(feature = "sdk")]
+pub mod sdk;
+
 // Re-exports
 pub use error::{PluginError, Result};
 pub use manifest::{PluginCapabilities, PluginExport, PluginManifest, PluginParameter};
@@ -97,6 +100,13 @@ pub use hot_reload::{
     HotReloadConfig, HotReloadEvent, HotReloadManager, HotReloadManagerBuilder, WatchedPluginInfo,
 };
 
+#[cfg(feature = "sdk")]
+pub use sdk::{
+    FunctionBuilder, PackageFormat, PackageMetadata, PluginBuilder, PluginCategory,
+    PluginDefinition, PluginPackager, PluginTemplate, PluginType, PluginValidator,
+    TemplateType, ValidationError, ValidationResult, ValidationWarning,
+};
+
 /// Prelude module for convenient imports.
 pub mod prelude {
     pub use crate::error::{PluginError, Result};
@@ -112,6 +122,12 @@ pub mod prelude {
 
     #[cfg(feature = "hot-reload")]
     pub use crate::hot_reload::{HotReloadConfig, HotReloadEvent, HotReloadManager};
+
+    #[cfg(feature = "sdk")]
+    pub use crate::sdk::{
+        PluginBuilder, PluginCategory, PluginDefinition, PluginTemplate, PluginType,
+        PluginValidator, TemplateType,
+    };
 }
 
 #[cfg(test)]
